@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime.js v4 Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .debug-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { border-left: 4px solid #4CAF50; }
+        .error { border-left: 4px solid #f44336; }
+        .warning { border-left: 4px solid #ff9800; }
+        .test-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #1976D2;
+        }
+        #test-element {
+            width: 100px;
+            height: 100px;
+            background: #4CAF50;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Anime.js v4 Debug Test</h1>
+    
+    <div class="debug-info" id="loading-status">
+        <h3>Loading Status</h3>
+        <p id="status-text">Checking anime.js v4 loading...</p>
+    </div>
+    
+    <div class="debug-info" id="feature-test">
+        <h3>Feature Test</h3>
+        <button class="test-button" onclick="testBasicAnimation()">Test Basic Animation</button>
+        <button class="test-button" onclick="testStaggerAnimation()">Test Stagger Animation</button>
+        <button class="test-button" onclick="testTimelineAnimation()">Test Timeline Animation</button>
+        <div id="test-element"></div>
+    </div>
+    
+    <div class="debug-info" id="console-output">
+        <h3>Console Output</h3>
+        <div id="console-log"></div>
+    </div>
+
+    <!-- Anime.js v4 ES Module -->
+    <script type="module">
+        import { animate, createTimeline, stagger, eases } from 'https://cdn.skypack.dev/animejs@4.1.0';
+        
+        // Make anime.js v4 available globally for compatibility
+        window.anime = {
+            animate: animate,
+            createTimeline: createTimeline,
+            stagger: stagger,
+            eases: eases
+        };
+        
+        // Dispatch custom event when anime.js is loaded
+        window.dispatchEvent(new CustomEvent('animeLoaded'));
+        
+        console.log('Anime.js v4 ES module loaded successfully');
+    </script>
+    
+    <script>
+        // Debug functions
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('loading-status');
+            const statusText = document.getElementById('status-text');
+            
+            statusText.textContent = message;
+            statusDiv.className = `debug-info ${type}`;
+        }
+        
+        function logToConsole(message) {
+            const consoleDiv = document.getElementById('console-log');
+            const timestamp = new Date().toLocaleTimeString();
+            consoleDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+        }
+        
+        // Test functions
+        function testBasicAnimation() {
+            if (typeof anime !== 'undefined' && anime.animate) {
+                logToConsole('Testing basic animation...');
+                anime.animate('#test-element', {
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 180, 360],
+                    duration: 1000,
+                    ease: 'outQuart'
+                });
+                logToConsole('Basic animation completed');
+            } else {
+                logToConsole('ERROR: anime.animate not available');
+            }
+        }
+        
+        function testStaggerAnimation() {
+            if (typeof anime !== 'undefined' && anime.animate && anime.stagger) {
+                logToConsole('Testing stagger animation...');
+                const buttons = document.querySelectorAll('.test-button');
+                anime.animate(buttons, {
+                    scale: [1, 1.1, 1],
+                    duration: 500,
+                    delay: anime.stagger(100),
+                    ease: 'outQuart'
+                });
+                logToConsole('Stagger animation completed');
+            } else {
+                logToConsole('ERROR: anime.stagger not available');
+            }
+        }
+        
+        function testTimelineAnimation() {
+            if (typeof anime !== 'undefined' && anime.createTimeline) {
+                logToConsole('Testing timeline animation...');
+                const timeline = anime.createTimeline();
+                timeline
+                    .add('#test-element', {
+                        scale: [1, 1.5],
+                        duration: 500
+                    })
+                    .add('#test-element', {
+                        rotate: [0, 180],
+                        duration: 500
+                    }, '-=250')
+                    .add('#test-element', {
+                        scale: [1.5, 1],
+                        duration: 500
+                    });
+                logToConsole('Timeline animation completed');
+            } else {
+                logToConsole('ERROR: anime.createTimeline not available');
+            }
+        }
+        
+        // Check loading status
+        document.addEventListener('DOMContentLoaded', function() {
+            logToConsole('DOM loaded');
+            
+            // Check if anime.js is already loaded
+            if (typeof anime !== 'undefined' && anime.animate) {
+                updateStatus('Anime.js v4 loaded successfully!', 'success');
+                logToConsole('Anime.js v4 detected on DOM load');
+            } else {
+                updateStatus('Waiting for anime.js v4 to load...', 'warning');
+                logToConsole('Anime.js v4 not yet loaded, waiting for event...');
+            }
+        });
+        
+        // Listen for animeLoaded event
+        window.addEventListener('animeLoaded', function() {
+            updateStatus('Anime.js v4 loaded via event!', 'success');
+            logToConsole('Anime.js v4 loaded via custom event');
+            
+            // Test basic functionality
+            if (anime.animate && anime.createTimeline && anime.stagger) {
+                logToConsole('All anime.js v4 features available');
+            } else {
+                logToConsole('WARNING: Some anime.js v4 features missing');
+            }
+        });
+        
+        // Fallback timeout
+        setTimeout(() => {
+            if (typeof anime === 'undefined') {
+                updateStatus('Anime.js v4 failed to load', 'error');
+                logToConsole('ERROR: Anime.js v4 not loaded after timeout');
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

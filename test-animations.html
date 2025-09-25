@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-element {
+            width: 100px;
+            height: 100px;
+            background: #007bff;
+            margin: 20px;
+            border-radius: 8px;
+        }
+        .test-button {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Animation Test</h1>
+    <p>Testing Anime.js v3 functionality</p>
+    
+    <div class="test-element" id="test1">Test 1</div>
+    <div class="test-element" id="test2">Test 2</div>
+    <div class="test-element" id="test3">Test 3</div>
+    
+    <button class="test-button" onclick="testBasicAnimation()">Test Basic Animation</button>
+    <button class="test-button" onclick="testStaggerAnimation()">Test Stagger Animation</button>
+    <button class="test-button" onclick="testTimelineAnimation()">Test Timeline Animation</button>
+    
+    <!-- Anime.js v3 CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <script>
+        console.log('Anime.js loaded:', typeof anime !== 'undefined');
+        console.log('Anime.js version:', anime ? 'v3' : 'not loaded');
+        
+        function testBasicAnimation() {
+            console.log('Testing basic animation...');
+            anime({
+                targets: '#test1',
+                translateX: 250,
+                rotate: '1turn',
+                backgroundColor: '#FFF',
+                duration: 800
+            });
+        }
+        
+        function testStaggerAnimation() {
+            console.log('Testing stagger animation...');
+            anime({
+                targets: '.test-element',
+                translateY: [0, -100],
+                backgroundColor: '#ff6b6b',
+                delay: anime.stagger(100)
+            });
+        }
+        
+        function testTimelineAnimation() {
+            console.log('Testing timeline animation...');
+            const tl = anime.timeline({
+                easing: 'easeOutExpo',
+                duration: 750
+            });
+            
+            tl.add({
+                targets: '#test1',
+                translateX: 250,
+            })
+            .add({
+                targets: '#test2',
+                translateX: 250,
+            }, '-=350')
+            .add({
+                targets: '#test3',
+                translateX: 250,
+            }, '-=350');
+        }
+        
+        // Auto-test on load
+        window.addEventListener('load', function() {
+            console.log('Page loaded, testing animations...');
+            setTimeout(testBasicAnimation, 1000);
+            setTimeout(testStaggerAnimation, 3000);
+            setTimeout(testTimelineAnimation, 5000);
+        });
+    </script>
+</body>
+</html>

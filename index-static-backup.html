@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mohak Akul Prakash - Data Science & AI Portfolio. Exploring the intersection of artificial intelligence and human cognition.">
+    <meta name="keywords" content="data science, machine learning, AI, cognitive science, portfolio, UCSD">
+    <meta name="author" content="Mohak Akul Prakash">
+    
+    <!-- Preconnect to Google Fonts for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Modern Google Fonts - Comfortaa Bold and Antic Slab -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Antic+Slab&display=swap" rel="stylesheet">
+    
+    <!-- Anime.js v4 is now imported via npm in React components -->
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <title>Mohak Akul Prakash | Data Science & AI Portfolio</title>
+  </head>
+  <body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#hero" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#hero" class="nav-logo-link" aria-label="Mohak Akul Prakash - Home">Mohak</a>
+            </div>
+            <ul class="nav-menu" id="nav-menu" role="menubar">
+                <li class="nav-item" role="none">
+                    <a href="#hero" class="nav-link" role="menuitem" aria-label="Go to Home section">Home</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#about" class="nav-link" role="menuitem" aria-label="Go to About section">About</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#skills" class="nav-link" role="menuitem" aria-label="Go to Skills section">Skills</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#projects" class="nav-link" role="menuitem" aria-label="Go to Projects section">Projects</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#experience" class="nav-link" role="menuitem" aria-label="Go to Experience section">Experience</a>
+                </li>
+                <li class="nav-item" role="none">
+                    <a href="#contact" class="nav-link" role="menuitem" aria-label="Go to Contact section">Contact</a>
+                </li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+                <span class="bar" aria-hidden="true"></span>
+                <span class="bar" aria-hidden="true"></span>
+                <span class="bar" aria-hidden="true"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="hero-name">Mohak Akul Prakash</span>
+                    <span class="hero-subtitle">Data Scientist & AI Researcher</span>
+                </h1>
+                <p class="hero-description">
+                    Exploring the intersection of artificial intelligence and human cognition. 
+                    Passionate about building intelligent systems that understand and enhance human potential.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-shape"></div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">Passionate about the future of AI and human cognition</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-paragraph">
+                        I'm a dedicated data scientist and AI researcher with a deep fascination for 
+                        the intersection of artificial intelligence and human cognition. My journey 
+                        began with a curiosity about how machines can learn and think, evolving into 
+                        a passion for building systems that augment human intelligence.
+                    </p>
+                    <p class="about-paragraph">
+                        Currently pursuing advanced studies in cognitive science and machine learning, 
+                        I focus on developing AI solutions that are not just technically sound, but 
+                        also ethically responsible and human-centered. My work spans from deep learning 
+                        research to practical applications in healthcare, education, and social impact.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="50">0</span>
+                            <span class="stat-label">Projects Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="3">0</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="15">0</span>
+                            <span class="stat-label">Technologies Mastered</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <div class="placeholder-content">
+                            <span class="placeholder-icon">👨‍💻</span>
+                            <p>Professional Photo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Skills & Expertise</h2>
+                <p class="section-subtitle">Technologies and tools I work with</p>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 class="category-title">Machine Learning</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Python</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95"></div>
+                            </div>
+                            <span class="skill-percentage">95%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">TensorFlow</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90"></div>
+                            </div>
+                            <span class="skill-percentage">90%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">PyTorch</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85"></div>
+                            </div>
+                            <span class="skill-percentage">85%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Scikit-learn</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="92"></div>
+                            </div>
+                            <span class="skill-percentage">92%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 class="category-title">Data Science</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Pandas</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95"></div>
+                            </div>
+                            <span class="skill-percentage">95%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">NumPy</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90"></div>
+                            </div>
+                            <span class="skill-percentage">90%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Matplotlib</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="88"></div>
+                            </div>
+                            <span class="skill-percentage">88%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">SQL</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85"></div>
+                            </div>
+                            <span class="skill-percentage">85%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 class="category-title">Web Development</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">JavaScript</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80"></div>
+                            </div>
+                            <span class="skill-percentage">80%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">React</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="75"></div>
+                            </div>
+                            <span class="skill-percentage">75%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Node.js</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="70"></div>
+                            </div>
+                            <span class="skill-percentage">70%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">D3.js</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85"></div>
+                            </div>
+                            <span class="skill-percentage">85%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Projects</h2>
+                <p class="section-subtitle">Some of my recent work and research</p>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">🧠</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Cognitive Load Prediction</h3>
+                        <p class="project-description">
+                            Machine learning model to predict cognitive load using EEG data and behavioral metrics. 
+                            Achieved 92% accuracy in real-time classification.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">TensorFlow</span>
+                            <span class="tech-tag">EEG Analysis</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">View Project</a>
+                            <a href="#" class="project-link">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">📊</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Healthcare Analytics Dashboard</h3>
+                        <p class="project-description">
+                            Interactive dashboard for healthcare data visualization and predictive analytics. 
+                            Built with React and D3.js for real-time data processing.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">D3.js</span>
+                            <span class="tech-tag">Python</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">View Project</a>
+                            <a href="#" class="project-link">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">🤖</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">NLP Sentiment Analysis</h3>
+                        <p class="project-description">
+                            Advanced natural language processing system for sentiment analysis across multiple languages. 
+                            Deployed with real-time API endpoints.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">NLP</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">FastAPI</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">View Project</a>
+                            <a href="#" class="project-link">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">🔬</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Research Paper: AI Ethics</h3>
+                        <p class="project-description">
+                            Published research on ethical implications of AI in healthcare decision-making. 
+                            Focus on bias detection and fairness in medical AI systems.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Research</span>
+                            <span class="tech-tag">Ethics</span>
+                            <span class="tech-tag">Healthcare AI</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Read Paper</a>
+                            <a href="#" class="project-link">Abstract</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Experience & Education</h2>
+                <p class="section-subtitle">My professional journey</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2023 - Present</div>
+                        <h3 class="timeline-title">Graduate Research Assistant</h3>
+                        <h4 class="timeline-company">UC San Diego</h4>
+                        <p class="timeline-description">
+                            Conducting research in cognitive science and machine learning, focusing on human-AI interaction 
+                            and developing novel approaches to understanding cognitive processes through computational models.
+                        </p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2022 - 2023</div>
+                        <h3 class="timeline-title">Data Science Intern</h3>
+                        <h4 class="timeline-company">TechCorp Analytics</h4>
+                        <p class="timeline-description">
+                            Developed machine learning models for predictive analytics, worked with large datasets, 
+                            and created data visualization tools for business intelligence applications.
+                        </p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2021 - 2022</div>
+                        <h3 class="timeline-title">Undergraduate Researcher</h3>
+                        <h4 class="timeline-company">University Lab</h4>
+                        <p class="timeline-description">
+                            Assisted in research projects involving neural networks and deep learning applications 
+                            in computer vision and natural language processing.
+                        </p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2020 - 2024</div>
+                        <h3 class="timeline-title">Bachelor's in Computer Science</h3>
+                        <h4 class="timeline-company">University of California</h4>
+                        <p class="timeline-description">
+                            Specialized in artificial intelligence, machine learning, and cognitive science. 
+                            Graduated with honors and multiple research publications.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Let's collaborate on something amazing</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3 class="contact-title">Let's Connect</h3>
+                    <p class="contact-description">
+                        I'm always interested in new opportunities, research collaborations, 
+                        and meaningful conversations about AI and human cognition.
+                    </p>
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <span class="contact-icon">📧</span>
+                            <div class="contact-details">
+                                <span class="contact-label">Email</span>
+                                <span class="contact-value">mohak@example.com</span>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <span class="contact-icon">📍</span>
+                            <div class="contact-details">
+                                <span class="contact-label">Location</span>
+                                <span class="contact-value">San Diego, CA</span>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <span class="contact-icon">💼</span>
+                            <div class="contact-details">
+                                <span class="contact-label">LinkedIn</span>
+                                <span class="contact-value">linkedin.com/in/mohak</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contact-form" aria-label="Contact form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" class="form-input" required aria-describedby="name-help">
+                        <label for="name" class="form-label">Your Name</label>
+                        <div id="name-help" class="sr-only">Enter your full name</div>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" class="form-input" required aria-describedby="email-help">
+                        <label for="email" class="form-label">Your Email</label>
+                        <div id="email-help" class="sr-only">Enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" class="form-input" required aria-describedby="subject-help">
+                        <label for="subject" class="form-label">Subject</label>
+                        <div id="subject-help" class="sr-only">Enter the subject of your message</div>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" class="form-input form-textarea" required aria-describedby="message-help"></textarea>
+                        <label for="message" class="form-label">Your Message</label>
+                        <div id="message-help" class="sr-only">Enter your message here</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary form-submit" aria-describedby="submit-help">Send Message</button>
+                    <div id="submit-help" class="sr-only">Click to send your message</div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2024 Mohak Akul Prakash. All rights reserved.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">GitHub</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
+                    <a href="#" class="footer-link">Twitter</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/advanced-animations.js"></script>
+  </body>
+</html>
