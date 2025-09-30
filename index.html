@@ -16,7 +16,16 @@
     
     <!-- Anime.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    
+    <script>
+      // Check if we were redirected from a 404
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect != location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
     <title>Mohak Akul Prakash | Data Science & AI Portfolio</title>
     <script type="module" crossorigin src="/assets/index-C9E2iegQ.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-xir0aj8B.css">
