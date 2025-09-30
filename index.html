@@ -17,16 +17,12 @@
     <!-- Anime.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script>
-      // GitHub Pages SPA redirect handling
+      // Simple redirect handler for GitHub Pages SPA
       (function(){
         var redirect = sessionStorage.redirect;
         delete sessionStorage.redirect;
-        if (redirect && redirect !== location.href) {
-          // Extract the path from the stored redirect URL
-          var url = new URL(redirect);
-          var path = url.pathname + url.search + url.hash;
-          // Use replaceState to update the URL without triggering a page reload
-          history.replaceState(null, null, path);
+        if (redirect && redirect !== location.pathname) {
+          history.replaceState(null, null, redirect);
         }
       })();
     </script>

@@ -4,22 +4,11 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script>
-      // GitHub Pages SPA redirect
-      // Store the current path and search parameters for React Router
-      var redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect;
-      
-      if (redirect && redirect !== location.href) {
-        // If we have a stored redirect, use it
-        history.replaceState(null, null, redirect);
-      } else {
-        // Otherwise, store the current 404 path for the main app to handle
-        sessionStorage.redirect = location.href;
-      }
+      // Simple GitHub Pages SPA redirect
+      sessionStorage.redirect = location.pathname;
+      location.replace('/');
     </script>
-    <meta http-equiv="refresh" content="0;URL='/'">
   </head>
   <body>
-    <p>Redirecting to the main application...</p>
   </body>
 </html>
