@@ -1,36 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AboutCarousel = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const intervalRef = useRef(null);
 
   const slides = [
     {
       id: 'who-i-am',
       label: 'Who I Am',
-      icon: '👨‍💻',
       title: 'Who I Am',
       content: "I'm a data science student at UC San Diego with an obsession for building things that actually work. I'm an avid researcher, builder, and hackathoner."
     },
     {
       id: 'what-excites-me',
       label: 'What Excites Me',
-      icon: '🧠',
       title: 'What Excites Me',
       content: "Right now, I'm particularly excited about the intersection of neuroscience and AI. Whether it's translating EMG signals into speech for people who can't speak, or using EEG to classify emotions, I'm drawn to projects where AI meets human cognition. I often find myself thinking about how to bridge gaps in communication, integrating hardware with AI, or scheming my next edge AI hackathon idea."
     },
     {
       id: 'how-i-learn',
       label: 'How I Learn',
-      icon: '🏆',
       title: 'How I Learn',
       content: "I learn best by doing—which explains why I've competed in 10 hackathons and won 6 of them. Each one taught me something new: how to ship fast, collaborate under pressure, and turn a 2am idea into a working demo by morning."
     },
     {
       id: 'outside-code',
       label: 'Outside Code',
-      icon: '🎵',
       title: 'Outside Code',
       content: "Outside I love listening to music, watching F1, playing racing games, or window shopping sneakers."
     }
@@ -40,12 +37,30 @@ const AboutCarousel = () => {
   useEffect(() => {
     if (isPaused) return;
 
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 3000);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [isPaused, slides.length]);
+
+  // Handle manual tab click with timer reset
+  const handleTabClick = (index) => {
+    setActiveSlide(index);
+    // Reset timer
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    if (!isPaused) {
+      intervalRef.current = setInterval(() => {
+        setActiveSlide((prev) => (prev + 1) % slides.length);
+      }, 3000);
+    }
+  };
 
   return (
     <section
@@ -68,11 +83,11 @@ const AboutCarousel = () => {
               {slides.map((slide, index) => (
                 <button
                   key={slide.id}
-                  onClick={() => setActiveSlide(index)}
+                  onClick={() => handleTabClick(index)}
                   className={`text-left px-4 py-3 rounded-lg transition-all duration-300 border-l-2 ${
                     activeSlide === index
                       ? 'bg-accent-orange/10 border-accent-orange text-accent-orange'
-                      : 'border-transparent text-text-muted hover:border-mono-gray-400 hover:text-text-secondary'
+                      : 'border-transparent text-zinc-600 hover:border-mono-gray-400 hover:text-text-secondary'
                   }`}
                 >
                   <span className="text-sm font-medium">{slide.label}</span>
@@ -95,7 +110,6 @@ const AboutCarousel = () => {
                       transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
                       className="space-y-6"
                     >
-                      <div className="text-6xl">{slide.icon}</div>
                       <h3 className="text-accent-orange text-2xl font-medium">
                         {slide.title}
                       </h3>
@@ -106,16 +120,6 @@ const AboutCarousel = () => {
                   )
                 ))}
               </AnimatePresence>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="mt-12">
-              <div className="w-full h-0.5 bg-mono-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-accent-orange to-accent-orange-light transition-all duration-300"
-                  style={{ width: `${((activeSlide + 1) / slides.length) * 100}%` }}
-                />
-              </div>
             </div>
           </div>
         </div>
