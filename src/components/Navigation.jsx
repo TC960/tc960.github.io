@@ -57,15 +57,42 @@ const Navigation = ({ isDarkMode, toggleDarkMode }) => {
     >
       <div className="container-wide py-6">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo with Liquid Gradient */}
           <motion.button
-            className="text-display text-lg font-medium text-text-primary hover:text-accent-orange transition-colors duration-300"
+            className="text-display text-lg font-medium nav-name-gradient"
             onClick={() => scrollToSection('hero')}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
             Mohak Prakash
           </motion.button>
+
+          <style jsx>{`
+            .nav-name-gradient {
+              background: linear-gradient(
+                90deg,
+                #c2410c,
+                #f97316,
+                #fbbf24,
+                #f97316,
+                #c2410c
+              );
+              background-size: 200% 100%;
+              background-clip: text;
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              animation: gradientFlow 4s linear infinite;
+            }
+
+            @keyframes gradientFlow {
+              0% {
+                background-position: 0% 50%;
+              }
+              100% {
+                background-position: 200% 50%;
+              }
+            }
+          `}</style>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">

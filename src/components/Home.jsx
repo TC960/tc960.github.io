@@ -9,6 +9,7 @@ import ProjectCard from "./ProjectCard";
 import AboutCarousel from "./AboutCarousel";
 import MarqueeSkills from "./MarqueeSkills";
 import ExperienceCard from "./ExperienceCard";
+import ScrambleText from "./ScrambleText";
 import { createScrollReveal, createHoverAnimations, createSkillBarAnimations, smoothScrollTo } from "../utils/smoothScroll";
 
 const Home = () => {
@@ -134,9 +135,10 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
                   >
-                    Mohak Akul
-                    <br />
-                    <span className="text-accent-orange">Prakash</span>
+                    <ScrambleText
+                      text="Mohak Akul Prakash"
+                      orangeText="Prakash"
+                    />
                   </motion.h1>
                 </div>
                 
