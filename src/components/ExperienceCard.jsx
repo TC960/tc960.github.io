@@ -37,9 +37,9 @@ const ExperienceCard = ({ experience, index = 0 }) => {
 
   return (
     <>
-      {/* Card Preview */}
+      {/* Card Preview with Hover Overlay */}
       <motion.div
-        className="card p-6 bg-zinc-100 dark:bg-zinc-900 space-y-3 cursor-pointer"
+        className="relative group cursor-pointer h-full"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         whileHover={{ y: -4, transition: { duration: 0.2 } }}
@@ -47,45 +47,59 @@ const ExperienceCard = ({ experience, index = 0 }) => {
         viewport={{ once: true }}
         onClick={() => setIsModalOpen(true)}
       >
-        {/* Date and Type Header */}
-        <div className="flex justify-between items-start gap-4">
-          <div className="text-caption text-accent-orange font-medium">{experience.type}</div>
-          <div className="text-caption text-text-muted text-right flex-shrink-0 text-xs">{experience.date}</div>
-        </div>
+        {/* Card Content */}
+        <div className="card p-8 bg-zinc-100 dark:bg-zinc-900 space-y-2.5 h-full flex flex-col rounded-xl">
+          {/* Date and Type Header */}
+          <div className="flex justify-between items-start gap-4">
+            <span className="px-2 py-0.5 bg-accent-orange/10 text-accent-orange text-xs font-medium rounded">
+              {experience.type}
+            </span>
+            <div className="text-caption text-text-muted text-right flex-shrink-0 text-xs">{experience.date}</div>
+          </div>
 
-        {/* Title and Company */}
-        <div className="space-y-1">
-          <h3 className="text-display text-lg leading-tight">{experience.title}</h3>
-          <p className="text-accent text-sm">{experience.company}</p>
-          {experience.location && (
-            <p className="text-caption text-text-muted text-xs">{experience.location}</p>
+          {/* Title and Company */}
+          <div className="space-y-0.5">
+            <h3 className="text-display text-lg leading-tight">{experience.title}</h3>
+            <p className="text-accent text-sm">{experience.company}</p>
+            {experience.location && (
+              <p className="text-caption text-text-muted text-xs">{experience.location}</p>
+            )}
+          </div>
+
+          {/* Brief Description - Max 3-4 lines with ellipsis */}
+          <p className="text-body text-sm leading-relaxed line-clamp-4 flex-grow">
+            {experience.description}
+          </p>
+
+          {/* Skills Preview - Show first 3 */}
+          {experience.skills && experience.skills.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {experience.skills.slice(0, 3).map((skill, i) => (
+                <span key={i} className="px-2 py-0.5 bg-mono-gray-200 dark:bg-zinc-800 text-text-muted text-xs rounded-full">
+                  {skill}
+                </span>
+              ))}
+              {experience.skills.length > 3 && (
+                <span className="px-2 py-0.5 text-accent-orange text-xs font-medium">
+                  +{experience.skills.length - 3}
+                </span>
+              )}
+            </div>
           )}
         </div>
 
-        {/* Brief Description */}
-        <p className="text-body text-sm leading-relaxed">
-          {truncateText(experience.description)}
-        </p>
-
-        {/* Skills Preview - Show first 3 */}
-        {experience.skills && experience.skills.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-2">
-            {experience.skills.slice(0, 3).map((skill, i) => (
-              <span key={i} className="px-2 py-1 bg-mono-gray-200 dark:bg-zinc-800 text-text-muted text-xs rounded-full">
-                {skill}
-              </span>
-            ))}
-            {experience.skills.length > 3 && (
-              <span className="px-2 py-1 text-accent-orange text-xs font-medium">
-                +{experience.skills.length - 3} more
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Click to view indicator */}
-        <div className="text-center pt-2">
-          <span className="text-accent-orange text-xs font-medium">Click for details</span>
+        {/* Glass Overlay on Hover */}
+        <div className="absolute inset-0 bg-black/50 dark:bg-black/60 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <svg
+            className="w-6 h-6 text-white mb-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          <span className="text-white font-medium text-sm">Click to expand</span>
         </div>
       </motion.div>
 
