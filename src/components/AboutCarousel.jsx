@@ -66,8 +66,6 @@ const AboutCarousel = () => {
     <section
       id="about"
       className="section bg-background-secondary"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
       <div className="container-medium">
         {/* Section Title */}
@@ -98,7 +96,13 @@ const AboutCarousel = () => {
 
           {/* Right Content Area */}
           <div className="lg:col-span-9">
-            <div className="relative min-h-[280px] lg:min-h-[240px]">
+            <div
+              className={`relative min-h-[280px] lg:min-h-[240px] rounded-lg p-6 transition-all duration-300 ${
+                isPaused ? 'bg-accent-orange/5 ring-1 ring-accent-orange/20' : ''
+              }`}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
               <AnimatePresence mode="wait">
                 {slides.map((slide, index) => (
                   index === activeSlide && (
