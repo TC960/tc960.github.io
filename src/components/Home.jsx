@@ -299,7 +299,13 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div className="space-y-8">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
             {[
               {
                 date: "Sep 2025 - Jan 2026",
@@ -307,7 +313,8 @@ const Home = () => {
                 company: "ProtoLab, UC San Diego Design Lab",
                 location: "San Diego, California, United States • On-site",
                 type: "Part-time",
-                description: "Built audio processing pipeline with pyannote.ai + Whisper Large V3, optimized on A100 GPU (40% faster). Designed multi-agent conversational AI for mock interviews with configurable personas. Achieved 60-70% latency reduction through parallel processing pipeline. Compared OpenAI models, open-source LLMs + 11Labs, and NVIDIA ACE framework."
+                description: "Built audio processing pipeline with pyannote.ai + Whisper Large V3, optimized on A100 GPU (40% faster). Designed multi-agent conversational AI for mock interviews with configurable personas. Achieved 60-70% latency reduction through parallel processing pipeline. Compared OpenAI models, open-source LLMs + 11Labs, and NVIDIA ACE framework.",
+                skills: ["Audio Processing", "AI", "GPU Optimization", "Multi-agent Systems"]
               },
               {
                 date: "Feb 2025 - Present",
@@ -315,7 +322,8 @@ const Home = () => {
                 company: "Knight Lab, UC San Diego",
                 location: "La Jolla, California, United States • On-site",
                 type: "Part-time",
-                description: "Building full research pipeline: scraping ~2000 articles, NER/RE script for data extraction, Knowledge Graph for microbiology research. Automated Python data collection pipelines with Google Sheets API, 99%+ accuracy on 2000+ studies. Built bash-based automation scripts for sample metadata extraction used across all lab subdivisions."
+                description: "Building full research pipeline: scraping ~2000 articles, NER/RE script for data extraction, Knowledge Graph for microbiology research. Automated Python data collection pipelines with Google Sheets API, 99%+ accuracy on 2000+ studies. Built bash-based automation scripts for sample metadata extraction used across all lab subdivisions.",
+                skills: ["NLP", "Knowledge Graphs", "Python", "Automation", "Data Extraction"]
               },
               {
                 date: "Oct 2025 - Present",
@@ -323,7 +331,8 @@ const Home = () => {
                 company: "Triton NeuroTech",
                 location: "La Jolla, California, United States • On-site",
                 type: "Extracurricular",
-                description: "Leading team of 11 engineers building wearable EMG system translating ASL gestures to text/speech. Managing two tracks: Interface/Dashboard team (ML inference, visualization) and Portable Speech team (Arduino/ESP32, audio synthesis). Full data pipeline from OpenBCI Ganglion signal acquisition to model deployment."
+                description: "Leading team of 11 engineers building wearable EMG system translating ASL gestures to text/speech. Managing two tracks: Interface/Dashboard team (ML inference, visualization) and Portable Speech team (Arduino/ESP32, audio synthesis). Full data pipeline from OpenBCI Ganglion signal acquisition to model deployment.",
+                skills: ["EMG", "ML", "Team Leadership", "Arduino", "ESP32"]
               },
               {
                 date: "Oct 2025 - Present",
@@ -331,7 +340,8 @@ const Home = () => {
                 company: "DS3 UCSD - DataHacks Board",
                 location: "La Jolla, California, United States • On-site",
                 type: "Extracurricular",
-                description: "Organizing data science hackathons and programming competitions. Handling logistics for university-wide events."
+                description: "Organizing data science hackathons and programming competitions. Handling logistics for university-wide events.",
+                skills: ["Event Management", "Leadership", "Community Building"]
               },
               {
                 date: "Jun 2025 - Sep 2025",
@@ -339,7 +349,8 @@ const Home = () => {
                 company: "EXL",
                 location: "La Jolla, California, United States",
                 type: "Full-time",
-                description: "Contributing to development of RiskXpert, an Agentic AI tool for automated insurance and risk analysis, focusing on risk assessment frameworks and control identification methodologies. Analyzing risk descriptions and implementing control mechanisms to enhance automated risk evaluation processes. Collaborating on AI/ML-driven risk assessment to streamline insurance underwriting through automation. Conducted an in-depth case study on potential OCR tool suggestions to be incorporated with the tool, ranging from on-the-fly SoTA methods, to from-the-ground-up approaches, comparing metrics like computational cost, efficiency and financial impact."
+                description: "Contributing to development of RiskXpert, an Agentic AI tool for automated insurance and risk analysis, focusing on risk assessment frameworks and control identification methodologies. Analyzing risk descriptions and implementing control mechanisms to enhance automated risk evaluation processes. Collaborating on AI/ML-driven risk assessment to streamline insurance underwriting through automation. Conducted an in-depth case study on potential OCR tool suggestions to be incorporated with the tool, ranging from on-the-fly SoTA methods, to from-the-ground-up approaches, comparing metrics like computational cost, efficiency and financial impact.",
+                skills: ["Agentic AI", "Risk Analysis", "OCR", "ML", "Insurance Tech"]
               },
               {
                 date: "Mar 2025 - Aug 2025",
@@ -348,7 +359,7 @@ const Home = () => {
                 location: "La Jolla • On-site",
                 type: "Part-time",
                 description: "Provided tutoring support for DSC 40A (Kyle M. Shannon: SP24) and DSC 20 (Brendan Tomoschuk: SA1 25), helping students understand fundamental concepts in data science and programming.",
-                skills: "Teaching • Data Science • Python Programming"
+                skills: ["Teaching", "Data Science", "Python Programming"]
               },
               {
                 date: "Aug 2024 - Sep 2024",
@@ -357,7 +368,7 @@ const Home = () => {
                 location: "Dwarka, Delhi, India • On-site",
                 type: "Internship",
                 description: "Developed a software integrated into interviews for better analysis of the candidate. Leveraged python and its libraries to convert video data to text, followed by deploying LLMs and GenAI to evaluate answer relevance, scoring responses based on fluency, coherence, and technical accuracy. Currently working on developing an integrated solution with a built-in plagiarism checker to verify answer authenticity and prevent AI-generated or internet-copied content.",
-                skills: "LLMs • LangChain • Application Programming Interfaces (API) • Ffmpeg • Prompt Engineering"
+                skills: ["LLMs", "LangChain", "APIs", "Ffmpeg", "Prompt Engineering"]
               },
               {
                 date: "Jun 2024 - Sep 2024",
@@ -366,46 +377,49 @@ const Home = () => {
                 location: "Gurugram, Haryana, India • Remote",
                 type: "Internship",
                 description: "Worked on developing and evaluating Spiking Neural Networks (SNNs) to improve real-time pattern recognition and object detection compared to traditional Artificial Neural Networks (ANNs). Designed and optimized various SNN architectures, tuning parameters for enhanced performance. Evaluated models using metrics like accuracy, precision, and F1-score, addressing challenges in training and encoding.",
-                skills: "Artificial Intelligence (AI) • Spiking Neural Networks (SNN)"
+                skills: ["AI", "Spiking Neural Networks", "Pattern Recognition"]
               }
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="grid-asymmetric items-start gap-8"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
+                className="card p-6 bg-zinc-100 dark:bg-zinc-900 space-y-3"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <div className="content-sidebar">
-                  <div className="text-caption text-accent-orange">{item.date}</div>
+                {/* Date at top-right */}
+                <div className="flex justify-between items-start gap-4">
+                  <div className="text-caption text-accent-orange font-medium">{item.type}</div>
+                  <div className="text-caption text-text-muted text-right flex-shrink-0">{item.date}</div>
                 </div>
-                <div className="content-main">
-                  <div className="card p-8 space-y-4 interactive">
-                    <div className="space-y-2">
-                      <h3 className="text-display text-xl">{item.title}</h3>
-                      <p className="text-accent">{item.company}</p>
-                      {item.location && (
-                        <p className="text-caption text-text-muted">{item.location}</p>
-                      )}
-                      {item.type && (
-                        <span className="inline-block px-3 py-1 bg-mono-gray-100 text-text-muted text-sm rounded-full">
-                          {item.type}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-body leading-relaxed">{item.description}</p>
-                    {item.skills && (
-                      <div className="pt-2">
-                        <p className="text-caption text-accent-orange font-medium mb-2">Skills:</p>
-                        <p className="text-body text-sm">{item.skills}</p>
-                      </div>
-                    )}
+
+                {/* Title and Company */}
+                <div className="space-y-1">
+                  <h3 className="text-display text-lg leading-tight">{item.title}</h3>
+                  <p className="text-accent text-sm">{item.company}</p>
+                  {item.location && (
+                    <p className="text-caption text-text-muted text-xs">{item.location}</p>
+                  )}
+                </div>
+
+                {/* Description */}
+                <p className="text-body text-sm leading-relaxed">{item.description}</p>
+
+                {/* Skills */}
+                {item.skills && (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {item.skills.map((skill, i) => (
+                      <span key={i} className="px-2 py-1 bg-mono-gray-200 dark:bg-zinc-800 text-text-muted text-xs rounded-full">
+                        {skill}
+                      </span>
+                    ))}
                   </div>
-                </div>
+                )}
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
