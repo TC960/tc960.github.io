@@ -8,6 +8,7 @@ import ResumeButton from "./ResumeButton";
 import ProjectCard from "./ProjectCard";
 import AboutCarousel from "./AboutCarousel";
 import MarqueeSkills from "./MarqueeSkills";
+import ExperienceCard from "./ExperienceCard";
 import { createScrollReveal, createHoverAnimations, createSkillBarAnimations, smoothScrollTo } from "../utils/smoothScroll";
 
 const Home = () => {
@@ -299,13 +300,7 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
                 date: "Sep 2025 - Jan 2026",
@@ -379,47 +374,10 @@ const Home = () => {
                 description: "Worked on developing and evaluating Spiking Neural Networks (SNNs) to improve real-time pattern recognition and object detection compared to traditional Artificial Neural Networks (ANNs). Designed and optimized various SNN architectures, tuning parameters for enhanced performance. Evaluated models using metrics like accuracy, precision, and F1-score, addressing challenges in training and encoding.",
                 skills: ["AI", "Spiking Neural Networks", "Pattern Recognition"]
               }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                className="card p-6 bg-zinc-100 dark:bg-zinc-900 space-y-3"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                {/* Date at top-right */}
-                <div className="flex justify-between items-start gap-4">
-                  <div className="text-caption text-accent-orange font-medium">{item.type}</div>
-                  <div className="text-caption text-text-muted text-right flex-shrink-0">{item.date}</div>
-                </div>
-
-                {/* Title and Company */}
-                <div className="space-y-1">
-                  <h3 className="text-display text-lg leading-tight">{item.title}</h3>
-                  <p className="text-accent text-sm">{item.company}</p>
-                  {item.location && (
-                    <p className="text-caption text-text-muted text-xs">{item.location}</p>
-                  )}
-                </div>
-
-                {/* Description */}
-                <p className="text-body text-sm leading-relaxed">{item.description}</p>
-
-                {/* Skills */}
-                {item.skills && (
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {item.skills.map((skill, i) => (
-                      <span key={i} className="px-2 py-1 bg-mono-gray-200 dark:bg-zinc-800 text-text-muted text-xs rounded-full">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
+            ].map((experience, index) => (
+              <ExperienceCard key={index} experience={experience} index={index} />
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
