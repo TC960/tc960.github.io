@@ -11,6 +11,7 @@ const Navigation = ({ isDarkMode, toggleDarkMode }) => {
     { id: 'hero', label: 'Home' },
     { id: 'about', label: 'About' },
     { id: 'skills', label: 'Skills' },
+    { id: 'research', label: 'Research' },
     { id: 'experience', label: 'Experience' },
     { id: 'projects', label: 'Projects' },
     { id: 'contact', label: 'Contact' }
@@ -77,7 +78,7 @@ const Navigation = ({ isDarkMode, toggleDarkMode }) => {
                 {section.label}
               </button>
             ))}
-            
+
             {/* Dark Mode Toggle Slider */}
             <button
               onClick={toggleDarkMode}
