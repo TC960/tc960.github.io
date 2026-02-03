@@ -415,7 +415,7 @@ const Projects = () => {
               {/* Right Content - Projects Grid (3 columns) */}
               <div className="flex-1 min-w-0">
                 <motion.div
-                  className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
+                  className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 auto-rows-fr"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}

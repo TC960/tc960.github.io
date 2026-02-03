@@ -35,9 +35,9 @@ const ProjectCard = ({ project, index = 0 }) => {
 
   return (
     <>
-      {/* Card with Fixed Height */}
+      {/* Card with Better Spacing */}
       <motion.div
-        className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden cursor-pointer flex flex-col min-h-[420px]"
+        className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden cursor-pointer flex flex-col hover:border-orange-500/50 transition-all duration-300 shadow-sm hover:shadow-md"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -46,49 +46,45 @@ const ProjectCard = ({ project, index = 0 }) => {
         whileHover={{ y: -4 }}
       >
         {/* Card Content */}
-        <div className="p-6 flex flex-col flex-1">
-          {/* Category Label - Fixed Height, Uppercase, Truncate */}
-          <div className="h-4 mb-3">
-            <div className="text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-600 font-medium truncate">
+        <div className="p-5 flex flex-col h-full">
+          {/* Category Label & Badge - Compact */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-500 font-semibold truncate">
               {project.categoryDisplay}
             </div>
-          </div>
-
-          {/* Award Badge - Fixed Height, Truncated */}
-          <div className="h-7 mb-3">
             {project.award && (
-              <span className="inline-block px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold rounded-full whitespace-nowrap max-w-full truncate">
+              <span className="inline-flex items-center px-2.5 py-0.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-bold rounded-full whitespace-nowrap">
                 {project.award}
               </span>
             )}
           </div>
 
-          {/* Title - Max 2 Lines with Ellipsis */}
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight mb-4 line-clamp-2 min-h-[3.5rem]">
+          {/* Title - Compact */}
+          <h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug mb-3 line-clamp-2">
             {project.title}
           </h3>
 
-          {/* Tech Tags - Single Row, Max 4 Tags */}
-          <div className="flex flex-wrap gap-1.5 mb-4 h-8 overflow-hidden">
+          {/* Tech Tags - Better Alignment */}
+          <div className="flex flex-wrap gap-1.5 mb-4">
             {visibleTech.map((tech, techIndex) => (
               <span
                 key={tech}
-                className="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs rounded-full shrink-0"
+                className="inline-flex items-center px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[11px] font-medium rounded-md"
               >
                 {tech}
               </span>
             ))}
             {hiddenCount > 0 && (
-              <span className="px-2 py-1 text-accent-orange text-xs font-medium shrink-0">
+              <span className="inline-flex items-center px-2.5 py-1 text-orange-500 text-[11px] font-semibold">
                 +{hiddenCount}
               </span>
             )}
           </div>
 
-          {/* Click to View Details - Anchored to Bottom */}
-          <div className="flex items-center justify-center mt-auto pt-4">
-            <div className="text-accent-orange text-sm font-medium">
-              Click to view details
+          {/* Click to View Details - Bottom */}
+          <div className="mt-auto pt-3 border-t border-zinc-100 dark:border-zinc-800">
+            <div className="text-orange-500 text-xs font-semibold text-center hover:text-orange-600 transition-colors">
+              Click to view details →
             </div>
           </div>
         </div>
