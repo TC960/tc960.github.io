@@ -35,9 +35,9 @@ const ProjectCard = ({ project, index = 0 }) => {
 
   return (
     <>
-      {/* Existing card - unchanged */}
+      {/* Card with Fixed Height */}
       <motion.div
-        className="card-elevated rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full"
+        className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden cursor-pointer flex flex-col min-h-[420px]"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -45,55 +45,48 @@ const ProjectCard = ({ project, index = 0 }) => {
         onClick={() => setIsModalOpen(true)}
         whileHover={{ y: -4 }}
       >
-        {/* Header - Always Visible */}
-        <div className="p-6 lg:p-8 flex flex-col flex-1">
-          {/* Category Label - Fixed Height */}
-          <div className="h-5 mb-2">
-            <div className="text-caption text-accent-orange">{project.categoryDisplay}</div>
+        {/* Card Content */}
+        <div className="p-6 flex flex-col flex-1">
+          {/* Category Label - Fixed Height, Uppercase, Truncate */}
+          <div className="h-4 mb-3">
+            <div className="text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-600 font-medium truncate">
+              {project.categoryDisplay}
+            </div>
           </div>
 
-          {/* Award Badge - Own Row */}
-          {project.award && (
-            <motion.div
-              className="mb-3"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-            >
-              <span className="inline-block px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold rounded-full whitespace-nowrap">
-                🏆 {project.award}
-              </span>
-            </motion.div>
-          )}
-          {!project.award && <div className="h-8 mb-3" />}
-
-          {/* Title - Max 2 Lines with Ellipsis */}
-          <h3 className="text-display text-xl leading-tight mb-4 line-clamp-2 min-h-[3.5rem]">
-            {project.title}
-          </h3>
-
-          {/* Tech Tags - Consistent Height */}
-          <div className="flex flex-wrap gap-2 mb-4 min-h-[2.5rem]">
-            {visibleTech.map((tech, techIndex) => (
-              <motion.span
-                key={tech}
-                className="px-3 py-1 bg-mono-gray-100 text-text-muted text-sm rounded-full h-fit"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: techIndex * 0.05 }}
-              >
-                {tech}
-              </motion.span>
-            ))}
-            {hiddenCount > 0 && (
-              <span className="px-3 py-1 text-accent-orange text-sm font-medium h-fit">
-                +{hiddenCount} more
+          {/* Award Badge - Fixed Height, Truncated */}
+          <div className="h-7 mb-3">
+            {project.award && (
+              <span className="inline-block px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold rounded-full whitespace-nowrap max-w-full truncate">
+                {project.award}
               </span>
             )}
           </div>
 
-          {/* View More Indicator */}
-          <div className="flex items-center justify-center mt-auto pt-2">
+          {/* Title - Max 2 Lines with Ellipsis */}
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight mb-4 line-clamp-2 min-h-[3.5rem]">
+            {project.title}
+          </h3>
+
+          {/* Tech Tags - Single Row, Max 4 Tags */}
+          <div className="flex flex-wrap gap-1.5 mb-4 h-8 overflow-hidden">
+            {visibleTech.map((tech, techIndex) => (
+              <span
+                key={tech}
+                className="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs rounded-full shrink-0"
+              >
+                {tech}
+              </span>
+            ))}
+            {hiddenCount > 0 && (
+              <span className="px-2 py-1 text-accent-orange text-xs font-medium shrink-0">
+                +{hiddenCount}
+              </span>
+            )}
+          </div>
+
+          {/* Click to View Details - Anchored to Bottom */}
+          <div className="flex items-center justify-center mt-auto pt-4">
             <div className="text-accent-orange text-sm font-medium">
               Click to view details
             </div>

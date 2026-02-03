@@ -63,8 +63,8 @@ const Projects = () => {
       year: 2025,
       description: 'AI platform for assistive communication that summarizes and generates expressive responses using both EEG-detected emotions and personality profiling, making conversations short, emotionally relevant, and true to each user\'s style. Combines emotion classification from brain signals and generative voice synthesis in a customizable interface designed for quick, accessible communication.',
       tech: ['OpenAI Whisper', 'GPT-5', 'ElevenLabs Voice', 'Python', 'React', 'EEG', 'Fourier Transform', 'Random Forest', 'PCA', 'ICA', 'PSD Analysis', 'MBTI', 'MCP Server', 'QLora', 'ngrok'],
-      categoryDisplay: 'EEG-assisted speech-aid tool',
-      award: 'Winner @ CalHacks',
+      categoryDisplay: 'AI/HEALTHCARE',
+      award: '🏆 CalHacks \'25',
       links: { devpost: 'https://devpost.com/software/why-waste-time-say-lot-word-when-few-word-do-trick', demo: 'https://www.youtube.com/watch?v=MEH357zinV4&t=1s' }
     },
     {
@@ -74,8 +74,8 @@ const Projects = () => {
       year: 2025,
       description: 'Early Parkinson\'s diagnostic aid that analyzes keystrokes, voice, and eye blinks with AI models to generate a patient risk report, aiming for affordable, large-scale screening among people aged over 50, while prioritizing user data privacy and compliance standards.',
       tech: ['Python', 'React', 'TypeScript', 'FastAPI', 'VLMs', 'Fourier Transform', 'HuggingFace', 'OpenCV', 'Pinecone'],
-      categoryDisplay: 'Compliance-ready AI Parkinsons Diagnostic Tool',
-      award: 'Winner @ HealthLink Life Sciences Hackathon',
+      categoryDisplay: 'AI/HEALTHCARE',
+      award: '🏆 HealthLink \'25',
       links: { devpost: 'https://devpost.com/software/take-2' }
     },
     {
@@ -85,7 +85,7 @@ const Projects = () => {
       year: 2025,
       description: 'Automated QA platform that crawls websites, builds a graph of interactions, and uses Claude AI to generate and run Playwright tests (Smoke, Logic, and Flow), enabling fast, reliable E2E testing with intelligent failure analysis for developers.',
       tech: ['Claude', 'Docker', 'd3.js', 'JUnit', 'k6', 'Neo4j', 'Playwright', 'TanStack', 'FastAPI', 'React', 'TypeScript'],
-      categoryDisplay: 'QA testing/AI',
+      categoryDisplay: 'AI/DEVELOPER TOOLS',
       links: { devpost: 'https://devpost.com/software/qa-smith', demo: 'https://www.youtube.com/watch?v=OkgMHV-PnKI' }
     },
     {
@@ -95,8 +95,8 @@ const Projects = () => {
       year: 2025,
       description: 'AI-powered web navigation assistant for developers. Automatically maps the structure of any web application into a knowledge graph and lets users ask in plain English—or by voice—how to perform actions.',
       tech: ['AI Navigation', 'Knowledge Graph', 'Voice AI', 'Web Mapping'],
-      categoryDisplay: 'AI/Developer Tools',
-      award: 'Winner @ Hack MIT \'25',
+      categoryDisplay: 'AI/DEVELOPER TOOLS',
+      award: '🏆 HackMIT \'25',
       links: { demo: '#', code: '#' }
     },
     {
@@ -106,7 +106,7 @@ const Projects = () => {
       year: 2025,
       description: 'AI coaching system that democratizes professional sports training through computer vision and voice AI. Analyzes workout videos in real-time with form corrections across 18+ sports.',
       tech: ['Next.js', 'Flask', 'MediaPipe', 'ElevenLabs'],
-      categoryDisplay: 'AI Sports Tech',
+      categoryDisplay: 'AI/SPORTS',
       links: { demo: '#', code: '#' }
     },
     {
@@ -116,8 +116,8 @@ const Projects = () => {
       year: 2025,
       description: 'AI-powered tax filing web application with document upload, voice assistance, and real-time analytics. Features OCR, MongoDB storage, and RAG system.',
       tech: ['React', 'MongoDB', 'OCR', 'Twilio'],
-      categoryDisplay: 'Web Application',
-      award: 'Winner @ Hacklytics \'24',
+      categoryDisplay: 'FULL-STACK',
+      award: '🏆 Hacklytics \'24',
       links: { demo: '#', code: '#' }
     },
     {
@@ -127,7 +127,7 @@ const Projects = () => {
       year: 2025,
       description: 'AI fitness app that matches users to pop star lookalikes using facial analysis and generates music-synced workouts based on Spotify BPM.',
       tech: ['OpenCV', 'MediaPipe', 'Facial Recognition', 'Spotify API'],
-      categoryDisplay: 'AI Fitness',
+      categoryDisplay: 'AI/FITNESS',
       links: { demo: '#', code: '#' }
     },
     {
@@ -137,7 +137,7 @@ const Projects = () => {
       year: 2025,
       description: 'Digital forensics tool using Meta Ray-Ban smart glasses and YOLOv11n computer vision to identify and track digital devices in real-time.',
       tech: ['Meta Ray-Ban', 'YOLOv11n', 'Computer Vision', 'LLM'],
-      categoryDisplay: 'Digital Forensics',
+      categoryDisplay: 'AI/FORENSICS',
       links: { demo: '#', code: '#' }
     },
     {
@@ -147,7 +147,7 @@ const Projects = () => {
       year: 2025,
       description: 'Brain-computer interface using SSVEP detected via EEG to control a remote car. Users focus on visual stimuli for hands-free operation.',
       tech: ['EEG', 'SSVEP', 'Brain-Computer Interface', 'Signal Processing'],
-      categoryDisplay: 'BCI Research',
+      categoryDisplay: 'RESEARCH/BCI',
       links: { demo: '#', research: '#' }
     },
     {
@@ -157,7 +157,7 @@ const Projects = () => {
       year: 2025,
       description: 'Containerized web application for AI-assisted video script generation using React and FastAPI with Docker and Kubernetes orchestration.',
       tech: ['React', 'FastAPI', 'Docker', 'Kubernetes'],
-      categoryDisplay: 'DevOps/AI',
+      categoryDisplay: 'DEVOPS/AI',
       links: { demo: '#', code: '#' }
     },
     {
@@ -167,7 +167,7 @@ const Projects = () => {
       year: 2025,
       description: 'Data-driven retail analysis investigating seasonal patterns using RandomForest classifier across 3,780 hyperparameter combinations.',
       tech: ['Python', 'RandomForest', 'RandomizedSearchCV', 'Statistical Analysis'],
-      categoryDisplay: 'Data Science',
+      categoryDisplay: 'DATA SCIENCE',
       links: { analysis: '#', code: '#' }
     },
     {
@@ -177,7 +177,7 @@ const Projects = () => {
       year: 2025,
       description: 'ML analysis predicting U.S. power outage causes using RandomForest on 1,534 outages with hypothesis testing and fairness evaluation.',
       tech: ['RandomForest', 'Hypothesis Testing', 'NMAR Analysis', 'Scikit-learn'],
-      categoryDisplay: 'Data Science',
+      categoryDisplay: 'DATA SCIENCE',
       links: { analysis: '#', code: '#' }
     },
     {
@@ -187,7 +187,7 @@ const Projects = () => {
       year: 2024,
       description: 'AI chatbot using Pinecone VectorDB and Gemini for pharmaceutical queries. Converted 100+ PDFs into vector embeddings for context-aware answers.',
       tech: ['React', 'Flask', 'Pinecone', 'Gemini AI'],
-      categoryDisplay: 'AI/Full-Stack',
+      categoryDisplay: 'AI/FULL-STACK',
       links: { demo: '#', code: '#' }
     },
     {
@@ -197,7 +197,7 @@ const Projects = () => {
       year: 2024,
       description: 'AI culinary assistant that recognizes ingredients from photos and generates recipes. Features Flutter cross-platform design and Hume AI voice interface.',
       tech: ['Flutter', 'GenAI', 'Hume AI', 'Computer Vision'],
-      categoryDisplay: 'AI/Mobile',
+      categoryDisplay: 'AI/MOBILE',
       links: { demo: '#', code: '#' }
     },
     {
@@ -207,7 +207,7 @@ const Projects = () => {
       year: 2024,
       description: 'Versatile exoskeleton for shoulder physiotherapy with innovative inflatable structure. Enhanced functionality based on Harvard study insights.',
       tech: ['Biomedical Engineering', 'Exoskeleton', 'Physiotherapy', 'Hardware'],
-      categoryDisplay: 'AI Research',
+      categoryDisplay: 'RESEARCH/AI',
       links: { research: '#', design: '#' }
     },
     {
@@ -217,7 +217,7 @@ const Projects = () => {
       year: 2024,
       description: 'Enhanced candidate analysis during interviews using FFmpeg and SpeechRecognition to convert video data to text with Gemini AI evaluation.',
       tech: ['FFmpeg', 'SpeechRecognition', 'Gemini AI', 'Database'],
-      categoryDisplay: 'Full-Stack',
+      categoryDisplay: 'FULL-STACK',
       links: { demo: '#', code: '#' }
     },
     {
@@ -227,7 +227,7 @@ const Projects = () => {
       year: 2024,
       description: 'Research on SNNs to improve real-time pattern recognition and object detection compared to traditional ANNs with optimized architectures.',
       tech: ['Spiking Neural Networks', 'Pattern Recognition', 'Object Detection'],
-      categoryDisplay: 'Neural Networks',
+      categoryDisplay: 'RESEARCH/ML',
       links: { research: '#', paper: '#' }
     },
     {
@@ -237,7 +237,7 @@ const Projects = () => {
       year: 2023,
       description: 'Tool that analyzes professors\' websites to generate alignment scores with personal research interests and automatically drafts personalized emails.',
       tech: ['Gmail API', 'Web Scraping', 'NLP', 'Research Matching'],
-      categoryDisplay: 'Research Tool',
+      categoryDisplay: 'RESEARCH/NLP',
       links: { demo: '#', code: '#' }
     },
     {
@@ -247,7 +247,7 @@ const Projects = () => {
       year: 2023,
       description: 'Song recommendation system using Spotify and Genius APIs analyzing 20+ criteria including danceability, energy, and tempo for personalized playlists.',
       tech: ['Spotify API', 'Genius API', 'Recommendation System', 'Python'],
-      categoryDisplay: 'Music Tech',
+      categoryDisplay: 'AI/MUSIC',
       links: { demo: '#', code: '#' }
     }
   ];
@@ -347,36 +347,32 @@ const Projects = () => {
         </section>
 
         {/* Filter and Projects Section - Tighter Padding */}
-        <section className="section py-12">
+        <section className="section py-8">
           <div className="max-w-[1400px] mx-auto px-6">
             <div className="flex gap-6">
               {/* Left Sidebar - Narrower */}
               <motion.div
-                className="w-[220px] flex-shrink-0"
+                className="w-[200px] max-w-[200px] flex-shrink-0"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                <div className="sticky top-24 space-y-6">
+                <div className="sticky top-24 space-y-5">
                   {/* Search */}
-                  <div className="space-y-2">
-                    <label htmlFor="project-search" className="block text-sm font-semibold text-gray-900 dark:text-white">
-                      Search
-                    </label>
+                  <div>
                     <input
                       type="text"
-                      id="project-search"
                       placeholder="Search..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-orange-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all bg-gray-50 dark:bg-black text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all bg-white dark:bg-zinc-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                     />
                   </div>
 
                   {/* Filters */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Filter</h3>
-                    <div className="space-y-1.5">
+                  <div className="space-y-1.5">
+                    <h3 className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Filter</h3>
+                    <div className="space-y-1">
                       {[
                         { key: 'all', label: 'All' },
                         { key: 'research', label: 'Research' },
@@ -388,10 +384,10 @@ const Projects = () => {
                         <button
                           key={key}
                           onClick={() => setFilter(key)}
-                          className={`w-full text-left px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                          className={`w-full text-left px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
                             filter === key
                               ? 'bg-orange-500 text-white'
-                              : 'text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-black border border-gray-200 dark:border-orange-500/30 hover:bg-gray-100 dark:hover:bg-orange-500/10 hover:text-gray-900 dark:hover:text-white'
+                              : 'bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800/50 hover:text-gray-900 dark:hover:text-white'
                           }`}
                         >
                           {label}
@@ -401,12 +397,12 @@ const Projects = () => {
                   </div>
 
                   {/* Sort Options */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Sort</h3>
+                  <div className="space-y-1.5">
+                    <h3 className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Sort</h3>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-orange-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-gray-50 dark:bg-black text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 text-sm border border-gray-200 dark:border-zinc-700 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white"
                     >
                       <option value="chronological">Newest</option>
                       <option value="alphabetical">A-Z</option>
