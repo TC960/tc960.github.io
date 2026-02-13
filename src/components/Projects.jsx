@@ -153,12 +153,13 @@ const Projects = () => {
     {
       id: 'genasis',
       title: 'GenAsis',
-      category: ['fullstack'],
+      category: ['fullstack', 'ml'],
       year: 2025,
-      description: 'Containerized web application for AI-assisted video script generation using React and FastAPI with Docker and Kubernetes orchestration.',
-      tech: ['React', 'FastAPI', 'Docker', 'Kubernetes'],
+      description: 'Production-grade AI script generation platform with real-time WebSocket streaming, multi-dimensional creativity controls, and containerized microservices deployed on GKE with Firebase auth.',
+      fullDescription: 'Full-stack AI platform for YouTube script generation with real-time WebSocket streaming of Claude 3 Haiku responses. Features a multi-dimensional customization engine with creativity control (temperature mapping), storytelling frameworks (triangulation, ladder method), and double hook mechanisms. Deployed on Google Kubernetes Engine with multi-replica pods, rolling updates, health checks, and Firebase authentication. Implements robust error handling with API overload detection and automatic fallback mechanisms. Project ownership has been transferred; domain and DNS have been decommissioned.',
+      tech: ['React', 'FastAPI', 'LangChain', 'Claude API', 'WebSocket', 'Docker', 'Kubernetes', 'GKE', 'Firebase', 'Vite'],
       categoryDisplay: 'DEVOPS/AI',
-      links: { demo: '#', code: '#' }
+      links: {}
     },
     {
       id: 'seasons-of-sales',
