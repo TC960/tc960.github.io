@@ -8,7 +8,7 @@
     "fullDescription": "Voice-first task capture built in an evening at a Voice Cursor hackathon. Rather than inventing a new primitive, it stitches existing tools into an end-to-end pipeline: voice goes in through Voice Cursor (no external app required), is handed off via a Telegram OpenClaw agent, and written into a Convex database as raw jobs. A Node.js agent sits on top of Convex and actively pulls new tasks as they arrive, routing them into a Notion database where Notion AI sorts, categorizes, and cleans them up. The result surfaces in a custom UI with tasks already organized, so the messy stream of speech becomes a tidy, prioritized list without the user lifting a finger.",
     "tech": ["Voice Cursor", "Telegram", "OpenClaw", "Convex", "Node.js", "Notion AI"],
     "categoryDisplay": "AI/PRODUCTIVITY",
-    "award": "🏆 3rd Place · Voice Cursor Hackathon",
+    "award": "🏆 Voice Cursor Hackathon",
     "links": {}
   },
   {
