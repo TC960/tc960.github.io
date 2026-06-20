@@ -1,5 +1,17 @@
 [
   {
+    "id": "voicecursor",
+    "title": "VoiceCursor",
+    "category": ["fullstack", "nlp", "ml"],
+    "year": 2026,
+    "description": "Voice-first capture system that turns spoken thoughts into organized, triaged tasks straight from your phone — no app to install. Speak a brain-dump or full meeting minutes and they land structured and sorted on the other side. The friction between having a thought and capturing it should be zero.",
+    "fullDescription": "Voice-first task capture built in an evening at a Voice Cursor hackathon. Rather than inventing a new primitive, it stitches existing tools into an end-to-end pipeline: voice goes in through Voice Cursor (no external app required), is handed off via a Telegram OpenClaw agent, and written into a Convex database as raw jobs. A Node.js agent sits on top of Convex and actively pulls new tasks as they arrive, routing them into a Notion database where Notion AI sorts, categorizes, and cleans them up. The result surfaces in a custom UI with tasks already organized, so the messy stream of speech becomes a tidy, prioritized list without the user lifting a finger.",
+    "tech": ["Voice Cursor", "Telegram", "OpenClaw", "Convex", "Node.js", "Notion AI"],
+    "categoryDisplay": "AI/PRODUCTIVITY",
+    "award": "🏆 3rd Place · Voice Cursor Hackathon",
+    "links": {}
+  },
+  {
     "id": "datahacks-judging-platform",
     "title": "DataHacks 2026 Judging Platform",
     "category": ["fullstack"],
@@ -9,17 +21,6 @@
     "tech": ["React", "Firebase", "Firestore", "Firebase Auth", "React Router", "Vite", "Node.js"],
     "categoryDisplay": "FULL-STACK",
     "links": { "demo": "https://datahacks26-judging-platform.netlify.app/" }
-  },
-  {
-    "id": "voicecursor",
-    "title": "VoiceCursor",
-    "category": ["fullstack", "nlp", "ml"],
-    "year": 2026,
-    "description": "Voice-first capture system that turns spoken thoughts into organized, triaged tasks straight from your phone — no app to install. Speak a brain-dump or full meeting minutes and they land structured and sorted on the other side. The friction between having a thought and capturing it should be zero.",
-    "fullDescription": "Voice-first task capture built in an evening at a Voice Cursor hackathon. Rather than inventing a new primitive, it stitches existing tools into an end-to-end pipeline: voice goes in through Voice Cursor (no external app required), is handed off via a Telegram OpenClaw agent, and written into a Convex database as raw jobs. A Node.js agent sits on top of Convex and actively pulls new tasks as they arrive, routing them into a Notion database where Notion AI sorts, categorizes, and cleans them up. The result surfaces in a custom UI with tasks already organized, so the messy stream of speech becomes a tidy, prioritized list without the user lifting a finger.",
-    "tech": ["Voice Cursor", "Telegram", "OpenClaw", "Convex", "Node.js", "Notion AI"],
-    "categoryDisplay": "AI/PRODUCTIVITY",
-    "links": {}
   },
   {
     "id": "claudavious",
