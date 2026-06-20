@@ -12,6 +12,17 @@
     "links": {}
   },
   {
+    "id": "rtms-biomarker-replication",
+    "title": "rTMS Depression Biomarker Replication",
+    "category": ["ml", "data", "research"],
+    "year": 2026,
+    "description": "Neural-data-science replication (COGS 138) that re-analyzes a public TMS-for-depression fMRI dataset and shows its headline ~0.91 'high accuracy' result is an artifact of circular feature selection — honest in-fold selection collapses it to chance. The famous Fox DLPFC–sgACC connectivity biomarker does not replicate.",
+    "fullDescription": "Single-author COGS 138 final project re-analyzing a public rTMS-for-depression fMRI dataset (63 subjects, 33 responders / 30 non-responders; responder = ≥50% MADRS reduction at week 12) to test whether a famous connectivity biomarker replicates — and to demonstrate that the dataset's headline 'high accuracy' result is an artifact of circular analysis (double-dipping, citing Kriegeskorte 2009). A linear four-step Python pipeline: (1) load and align connectivity features from Excel sheets, normalizing subject IDs; (2) a Fox sanity check — Pearson r vs continuous % MADRS change with 1000-permutation p-values plus 5-fold out-of-fold logistic-regression AUC — finding the Fox DLPFC–sgACC anticorrelation does NOT replicate (r = +0.14, p = 0.27; AUC = 0.60 in the CC variant, near chance in GSR); (3) a binary-vs-dimensional comparison with RandomForest classifier and regressor over identical RepeatedStratifiedKFold (5×10) splits; and (4) a leakage proof: 200 pure-noise features show that selecting features on the full sample manufactures AUC ≈ 0.71 from nothing, while honest in-fold selection collapses to chance (0.45) — the exact mechanism inflating the dataset's seed-set 0.91, since those seeds were defined by contrasting responders vs non-responders in the same sample. The 'failure' is the result: a null replication plus a caught trap, with fixed-seed reproducibility and permutation testing throughout.",
+    "tech": ["Python", "scikit-learn", "scipy", "pandas", "NumPy", "matplotlib", "Random Forest", "fMRI", "Permutation Testing"],
+    "categoryDisplay": "DATA SCIENCE / NEURO",
+    "links": {}
+  },
+  {
     "id": "datahacks-judging-platform",
     "title": "DataHacks 2026 Judging Platform",
     "category": ["fullstack"],
@@ -43,17 +54,6 @@
     "tech": ["PyTorch", "EfficientNet-B0", "Transfer Learning", "CutMix", "Label Smoothing", "AdamW", "Cosine Annealing", "Computer Vision", "NVIDIA H100"],
     "categoryDisplay": "ML/COMPUTER VISION",
     "award": "🏆 6th in Class · DSC 140B",
-    "links": {}
-  },
-  {
-    "id": "rtms-biomarker-replication",
-    "title": "rTMS Depression Biomarker Replication",
-    "category": ["ml", "data", "research"],
-    "year": 2026,
-    "description": "Neural-data-science replication (COGS 138) that re-analyzes a public TMS-for-depression fMRI dataset and shows its headline ~0.91 'high accuracy' result is an artifact of circular feature selection — honest in-fold selection collapses it to chance. The famous Fox DLPFC–sgACC connectivity biomarker does not replicate.",
-    "fullDescription": "Single-author COGS 138 final project re-analyzing a public rTMS-for-depression fMRI dataset (63 subjects, 33 responders / 30 non-responders; responder = ≥50% MADRS reduction at week 12) to test whether a famous connectivity biomarker replicates — and to demonstrate that the dataset's headline 'high accuracy' result is an artifact of circular analysis (double-dipping, citing Kriegeskorte 2009). A linear four-step Python pipeline: (1) load and align connectivity features from Excel sheets, normalizing subject IDs; (2) a Fox sanity check — Pearson r vs continuous % MADRS change with 1000-permutation p-values plus 5-fold out-of-fold logistic-regression AUC — finding the Fox DLPFC–sgACC anticorrelation does NOT replicate (r = +0.14, p = 0.27; AUC = 0.60 in the CC variant, near chance in GSR); (3) a binary-vs-dimensional comparison with RandomForest classifier and regressor over identical RepeatedStratifiedKFold (5×10) splits; and (4) a leakage proof: 200 pure-noise features show that selecting features on the full sample manufactures AUC ≈ 0.71 from nothing, while honest in-fold selection collapses to chance (0.45) — the exact mechanism inflating the dataset's seed-set 0.91, since those seeds were defined by contrasting responders vs non-responders in the same sample. The 'failure' is the result: a null replication plus a caught trap, with fixed-seed reproducibility and permutation testing throughout.",
-    "tech": ["Python", "scikit-learn", "scipy", "pandas", "NumPy", "matplotlib", "Random Forest", "fMRI", "Permutation Testing"],
-    "categoryDisplay": "DATA SCIENCE / NEURO",
     "links": {}
   },
   {
