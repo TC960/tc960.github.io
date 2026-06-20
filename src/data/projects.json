@@ -1,0 +1,243 @@
+[
+  {
+    "id": "datahacks-judging-platform",
+    "title": "DataHacks 2026 Judging Platform",
+    "category": ["fullstack"],
+    "year": 2026,
+    "description": "Serverless React + Firebase platform for running hackathon judging end to end: judges log in, score assigned projects against track-specific rubrics, and organizers watch live per-track leaderboards. The substantive engineering is the track-aware rubric system and the judge↔project assignment algorithms.",
+    "fullDescription": "Single-page React app (React 19 + React Router 7, Vite) backed entirely by Firebase Auth + Firestore — no custom server. Judges sign in with a username + 4-digit PIN (transformed client-side into a synthetic Firebase email/password), see their assigned projects, and score each against a track-specific rubric; an organizer views live track leaderboards. The core of the system is a track-aware rubric engine (8 tracks, normally 5 criteria × 10 pts, with alias mapping from Firestore track labels to rubric definitions and a sustainability-themed fallback) and a set of offline Node data pipelines that parse judge and Devpost submission CSVs and assign judges to projects via round-robin (3 judges/project) or team-slice strategies. Leaderboards subscribe to Firestore in real time with onSnapshot, bucketing evaluations by track and ranking projects by average total score. Economics is handled specially — 50 judge-scored points plus 100 performance-scored (PnL / Sharpe tiebreaker) surfaced as a non-scored note. A full admin aggregation panel (coverage %, CSV export) is built but intentionally kept out of the router.",
+    "tech": ["React", "Firebase", "Firestore", "Firebase Auth", "React Router", "Vite", "Node.js"],
+    "categoryDisplay": "FULL-STACK",
+    "links": { "demo": "https://datahacks26-judging-platform.netlify.app/" }
+  },
+  {
+    "id": "voicecursor",
+    "title": "VoiceCursor",
+    "category": ["fullstack", "nlp", "ml"],
+    "year": 2026,
+    "description": "Voice-first capture system that turns spoken thoughts into organized, triaged tasks straight from your phone — no app to install. Speak a brain-dump or full meeting minutes and they land structured and sorted on the other side. The friction between having a thought and capturing it should be zero.",
+    "fullDescription": "Voice-first task capture built in an evening at a Voice Cursor hackathon. Rather than inventing a new primitive, it stitches existing tools into an end-to-end pipeline: voice goes in through Voice Cursor (no external app required), is handed off via a Telegram OpenClaw agent, and written into a Convex database as raw jobs. A Node.js agent sits on top of Convex and actively pulls new tasks as they arrive, routing them into a Notion database where Notion AI sorts, categorizes, and cleans them up. The result surfaces in a custom UI with tasks already organized, so the messy stream of speech becomes a tidy, prioritized list without the user lifting a finger.",
+    "tech": ["Voice Cursor", "Telegram", "OpenClaw", "Convex", "Node.js", "Notion AI"],
+    "categoryDisplay": "AI/PRODUCTIVITY",
+    "links": {}
+  },
+  {
+    "id": "claudavious",
+    "title": "Claudavious",
+    "category": ["ml", "research", "fullstack"],
+    "year": 2026,
+    "description": "Autonomous rover (DSC 190) that runs a full sensing-to-action loop on-device. An EfficientNet terrain/obstacle classifier exported to ONNX runs locally on a Raspberry Pi 5, while a 3D-printed robotic arm lowers a soil-moisture probe to take field samples — all logged to Firebase, even when the network drops.",
+    "fullDescription": "Autonomous rover built for DSC 190 to navigate uneven terrain and run a full sensing-to-action loop entirely on-device. Perception runs on a Raspberry Pi 5: an EfficientNet model trained for terrain and obstacle classification was exported to ONNX so it runs efficiently on the Pi's constrained hardware without a connected GPU or remote server, letting the rover read what's in front of it and make navigation decisions locally in the field. Firebase serves as the backbone for state — telemetry streams up in real time and commands flow back down the same channel, so the rover can be monitored and steered remotely while still acting on its own. The whole system stays reachable over SSH, enabling live debugging, retraining, and direct control without tearing anything down between runs. On top of navigation, Claudavious carries a 3D-printed robotic arm driven by a stepper motor with a soil moisture sensor at the end: it can position the arm, lower the probe, take a reading, and log the measurement back through Firebase — turning a navigation demo into a field-sampling platform that keeps collecting data even when the connection drops.",
+    "tech": ["Raspberry Pi 5", "EfficientNet", "ONNX Runtime", "Firebase", "Robotics", "Computer Vision", "Stepper Motor", "SSH"],
+    "categoryDisplay": "ROBOTICS/AI",
+    "links": {}
+  },
+  {
+    "id": "socalguessr",
+    "title": "SoCalGuessr",
+    "category": ["ml", "data", "research"],
+    "year": 2026,
+    "description": "6-way image geolocation classifier that predicts which Southern California city a street-level image was taken in (Anaheim, Bakersfield, LA, Riverside, SLO, San Diego). A fine-tuned EfficientNet-B0 with CutMix, label smoothing, and differential learning rates reached ~93% validation accuracy — roughly 4× the human baseline and 5.6× chance.",
+    "fullDescription": "DSC 140B final project (placed 6th in class) tackling 6-way street-level image geolocation across ~9,180 near-balanced Southern California images, where chance sits at ~17% and my own human baseline was only 22%. The submitted model is an ImageNet-pretrained EfficientNet-B0 backbone (depthwise-separable convolutions, SiLU activations, squeeze-and-excitation) with a custom classifier head (Dropout → Linear 1280→256 → BatchNorm → ReLU → Dropout → Linear 256→6), ~4.1M params. Training used AdamW with differential learning rates (backbone 1e-4, head 1e-3), 2-epoch linear warmup into cosine annealing, gradient clipping, label smoothing (0.1), and CutMix (α=1.0, 50% per batch), plus heavy augmentation (random crop, flip, color jitter, rotation, Gaussian blur, random erasing). ~10 min to train on a single NVIDIA H100, converging to ~93.3% peak validation accuracy. A four-attempt ablation (simple B0, advanced B0, B2, ResNet18+Places365) showed the smaller B0 backbone with an aggressive regularization and scheduling recipe beat both a larger backbone and a domain-specific pretrain — training discipline mattered more than capacity or pretraining domain at this dataset scale.",
+    "tech": ["PyTorch", "EfficientNet-B0", "Transfer Learning", "CutMix", "Label Smoothing", "AdamW", "Cosine Annealing", "Computer Vision", "NVIDIA H100"],
+    "categoryDisplay": "ML/COMPUTER VISION",
+    "award": "🏆 6th in Class · DSC 140B",
+    "links": {}
+  },
+  {
+    "id": "few-words",
+    "title": "Why waste time say lot word when few word do trick?",
+    "category": ["fullstack", "ml", "research", "data", "nlp"],
+    "year": 2025,
+    "description": "An AAC (augmentative & alternative communication) assistant: the user types a few keywords, a LangGraph + GPT-4o-mini agent generates four full-sentence response variants, and the chosen one is spoken through expressive ElevenLabs TTS whose delivery is modulated in real time by the user's Muse-EEG-derived emotional state.",
+    "fullDescription": "Built at CalHacks '25 and refined afterward, an assistive-communication assistant that runs three concurrent runtimes — a React SPA, a FastAPI backend, and a standalone Muse EEG client. The agentic core is orchestrated with LangGraph and LangChain: a StateGraph agent drives GPT-4o-mini through a bounded tool-calling loop (Firestore context, time, location, live Open-Meteo weather) to produce four energy-graded sentence variants (low/medium/high/contradictory) from a few typed keywords. EEG → emotion: the EEG client streams 5-channel Muse data over LSL, extracts a 52-feature vector per 2 s window (Butterworth bandpass + notch, Welch band power and differential entropy across theta/alpha/beta/gamma, plus alpha asymmetry and band ratios), and a calibrated RandomForest classifier (trained with leakage-aware GroupKFold on trial IDs) predicts the user's emotional state, broadcast live to the frontend. Expressive TTS: the chosen variant's energy maps to ElevenLabs stability/style ranges, then the EEG emotion offsets those settings before synthesizing speech with eleven_turbo_v2_5. Partner speech is transcribed via Whisper and attributed with an MFCC-fingerprint speaker-diarization service, with conversations persisted to Firebase Firestore. The genuinely sophisticated piece is the leakage-aware EEG ML pipeline wired into a LangGraph-orchestrated agent and dual-modal (energy + emotion) expressive voice control.",
+    "tech": ["FastAPI", "LangGraph", "LangChain", "MCP Server", "GPT-4o-mini", "QLora", "OpenAI Whisper", "ElevenLabs", "Muse EEG", "LSL", "scikit-learn", "Random Forest", "Fourier Transform", "PCA", "ICA", "PSD Analysis", "librosa", "Firebase Firestore", "React", "ngrok"],
+    "categoryDisplay": "AI/HEALTHCARE",
+    "award": "🏆 CalHacks '25",
+    "links": { "devpost": "https://devpost.com/software/why-waste-time-say-lot-word-when-few-word-do-trick", "demo": "https://www.youtube.com/watch?v=MEH357zinV4&t=1s" }
+  },
+  {
+    "id": "take-2",
+    "title": "Take 2",
+    "category": ["fullstack", "ml", "research", "data"],
+    "year": 2025,
+    "description": "Early Parkinson's diagnostic aid that analyzes keystrokes, voice, and eye blinks with AI models to generate a patient risk report, aiming for affordable, large-scale screening among people aged over 50, while prioritizing user data privacy and compliance standards.",
+    "tech": ["Python", "React", "TypeScript", "FastAPI", "VLMs", "Fourier Transform", "HuggingFace", "OpenCV", "Pinecone"],
+    "categoryDisplay": "AI/HEALTHCARE",
+    "award": "🏆 HealthLink '25",
+    "links": { "devpost": "https://devpost.com/software/take-2" }
+  },
+  {
+    "id": "qa-smith",
+    "title": "QA smith",
+    "category": ["fullstack", "ml"],
+    "year": 2025,
+    "description": "Automated QA platform that crawls websites, builds a graph of interactions, and uses Claude AI to generate and run Playwright tests (Smoke, Logic, and Flow), enabling fast, reliable E2E testing with intelligent failure analysis for developers.",
+    "tech": ["Claude", "Docker", "d3.js", "JUnit", "k6", "Neo4j", "Playwright", "TanStack", "FastAPI", "React", "TypeScript"],
+    "categoryDisplay": "AI/DEVELOPER TOOLS",
+    "links": { "devpost": "https://devpost.com/software/qa-smith", "demo": "https://www.youtube.com/watch?v=OkgMHV-PnKI" }
+  },
+  {
+    "id": "clueless",
+    "title": "Clueless",
+    "category": ["fullstack", "ml"],
+    "year": 2025,
+    "description": "AI-powered web navigation assistant for developers. Automatically maps the structure of any web application into a knowledge graph and lets users ask in plain English—or by voice—how to perform actions.",
+    "tech": ["AI Navigation", "Knowledge Graph", "Voice AI", "Web Mapping"],
+    "categoryDisplay": "AI/DEVELOPER TOOLS",
+    "award": "🏆 HackMIT '25",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "coachgpt",
+    "title": "CoachGPT",
+    "category": ["fullstack", "ml"],
+    "year": 2025,
+    "description": "AI coaching system that democratizes professional sports training through computer vision and voice AI. Analyzes workout videos in real-time with form corrections across 18+ sports.",
+    "tech": ["Next.js", "Flask", "MediaPipe", "ElevenLabs"],
+    "categoryDisplay": "AI/SPORTS",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "taxdaddy",
+    "title": "TaxDaddy",
+    "category": ["fullstack"],
+    "year": 2025,
+    "description": "AI-powered tax filing web application with document upload, voice assistance, and real-time analytics. Features OCR, MongoDB storage, and RAG system.",
+    "tech": ["React", "MongoDB", "OCR", "Twilio"],
+    "categoryDisplay": "FULL-STACK",
+    "award": "🏆 Hacklytics '24",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "pop-off",
+    "title": "Pop Off!",
+    "category": ["fullstack", "ml"],
+    "year": 2025,
+    "description": "AI fitness app that matches users to pop star lookalikes using facial analysis and generates music-synced workouts based on Spotify BPM.",
+    "tech": ["OpenCV", "MediaPipe", "Facial Recognition", "Spotify API"],
+    "categoryDisplay": "AI/FITNESS",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "see-with-me",
+    "title": "See With Me",
+    "category": ["fullstack", "ml"],
+    "year": 2025,
+    "description": "Digital forensics tool using Meta Ray-Ban smart glasses and YOLOv11n computer vision to identify and track digital devices in real-time.",
+    "tech": ["Meta Ray-Ban", "YOLOv11n", "Computer Vision", "LLM"],
+    "categoryDisplay": "AI/FORENSICS",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "triton-neurotech-ssvep",
+    "title": "Triton Neurotech SSVEP EEG RC Car",
+    "category": ["research"],
+    "year": 2025,
+    "description": "Brain-computer interface using SSVEP detected via EEG to control a remote car. Users focus on visual stimuli for hands-free operation.",
+    "tech": ["EEG", "SSVEP", "Brain-Computer Interface", "Signal Processing"],
+    "categoryDisplay": "RESEARCH/BCI",
+    "links": { "demo": "#", "research": "#" }
+  },
+  {
+    "id": "genasis",
+    "title": "GenAsis",
+    "category": ["fullstack", "ml"],
+    "year": 2025,
+    "description": "Production-grade AI script generation platform with real-time WebSocket streaming, multi-dimensional creativity controls, and containerized microservices deployed on GKE with Firebase auth.",
+    "fullDescription": "Full-stack AI platform for YouTube script generation with real-time WebSocket streaming of Claude 3 Haiku responses. Features a multi-dimensional customization engine with creativity control (temperature mapping), storytelling frameworks (triangulation, ladder method), and double hook mechanisms. Deployed on Google Kubernetes Engine with multi-replica pods, rolling updates, health checks, and Firebase authentication. Implements robust error handling with API overload detection and automatic fallback mechanisms. Project ownership has been transferred; domain and DNS have been decommissioned.",
+    "tech": ["React", "FastAPI", "LangChain", "Claude API", "WebSocket", "Docker", "Kubernetes", "GKE", "Firebase", "Vite"],
+    "categoryDisplay": "DEVOPS/AI",
+    "links": {}
+  },
+  {
+    "id": "seasons-of-sales",
+    "title": "Seasons of Sales",
+    "category": ["data"],
+    "year": 2025,
+    "description": "Data-driven retail analysis investigating seasonal patterns using RandomForest classifier across 3,780 hyperparameter combinations.",
+    "tech": ["Python", "RandomForest", "RandomizedSearchCV", "Statistical Analysis"],
+    "categoryDisplay": "DATA SCIENCE",
+    "links": { "analysis": "#", "code": "#" }
+  },
+  {
+    "id": "power-outage-analysis",
+    "title": "Power Outage Analysis",
+    "category": ["data", "ml"],
+    "year": 2025,
+    "description": "ML analysis predicting U.S. power outage causes using RandomForest on 1,534 outages with hypothesis testing and fairness evaluation.",
+    "tech": ["RandomForest", "Hypothesis Testing", "NMAR Analysis", "Scikit-learn"],
+    "categoryDisplay": "DATA SCIENCE",
+    "links": { "analysis": "#", "code": "#" }
+  },
+  {
+    "id": "pharmaltai",
+    "title": "PharmaltAI",
+    "category": ["fullstack", "nlp"],
+    "year": 2024,
+    "description": "AI chatbot using Pinecone VectorDB and Gemini for pharmaceutical queries. Converted 100+ PDFs into vector embeddings for context-aware answers.",
+    "tech": ["React", "Flask", "Pinecone", "Gemini AI"],
+    "categoryDisplay": "AI/FULL-STACK",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "munch",
+    "title": "Munch",
+    "category": ["fullstack", "nlp"],
+    "year": 2024,
+    "description": "AI culinary assistant that recognizes ingredients from photos and generates recipes. Features Flutter cross-platform design and Hume AI voice interface.",
+    "tech": ["Flutter", "GenAI", "Hume AI", "Computer Vision"],
+    "categoryDisplay": "AI/MOBILE",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "triton-neurotech-dendrite",
+    "title": "Triton Neurotech Dendrite Project",
+    "category": ["research", "ml"],
+    "year": 2024,
+    "description": "Versatile exoskeleton for shoulder physiotherapy with innovative inflatable structure. Enhanced functionality based on Harvard study insights.",
+    "tech": ["Biomedical Engineering", "Exoskeleton", "Physiotherapy", "Hardware"],
+    "categoryDisplay": "RESEARCH/AI",
+    "links": { "research": "#", "design": "#" }
+  },
+  {
+    "id": "candidate-analysis",
+    "title": "Candidate Analysis System",
+    "category": ["fullstack", "ml"],
+    "year": 2024,
+    "description": "Enhanced candidate analysis during interviews using FFmpeg and SpeechRecognition to convert video data to text with Gemini AI evaluation.",
+    "tech": ["FFmpeg", "SpeechRecognition", "Gemini AI", "Database"],
+    "categoryDisplay": "FULL-STACK",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "spiking-neural-networks",
+    "title": "Spiking Neural Networks Research",
+    "category": ["research", "ml"],
+    "year": 2024,
+    "description": "Research on SNNs to improve real-time pattern recognition and object detection compared to traditional ANNs with optimized architectures.",
+    "tech": ["Spiking Neural Networks", "Pattern Recognition", "Object Detection"],
+    "categoryDisplay": "RESEARCH/ML",
+    "links": { "research": "#", "paper": "#" }
+  },
+  {
+    "id": "research",
+    "title": "ReSearch",
+    "category": ["research", "nlp"],
+    "year": 2023,
+    "description": "Tool that analyzes professors' websites to generate alignment scores with personal research interests and automatically drafts personalized emails.",
+    "tech": ["Gmail API", "Web Scraping", "NLP", "Research Matching"],
+    "categoryDisplay": "RESEARCH/NLP",
+    "links": { "demo": "#", "code": "#" }
+  },
+  {
+    "id": "spotify-song-recommendation",
+    "title": "Spotify Song Recommendation",
+    "category": ["ml", "nlp"],
+    "year": 2023,
+    "description": "Song recommendation system using Spotify and Genius APIs analyzing 20+ criteria including danceability, energy, and tempo for personalized playlists.",
+    "tech": ["Spotify API", "Genius API", "Recommendation System", "Python"],
+    "categoryDisplay": "AI/MUSIC",
+    "links": { "demo": "#", "code": "#" }
+  }
+]

@@ -4,11 +4,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ExperienceCard = ({ experience, index = 0 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Truncate description to ~150 characters for preview
-  const truncateText = (text, maxLength = 150) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength).trim() + '...';
-  };
+  // Normalize to a roles array so single- and multi-role entries share one code path.
+  const roles = experience.roles || [
+    {
+      title: experience.title,
+      date: experience.date,
+      description: experience.description,
+      skills: experience.skills,
+    },
+  ];
+  const isMultiRole = roles.length > 1;
+
+  // Union of every role's skills (de-duped), used for the compact preview pills.
+  const allSkills = [...new Set(roles.flatMap((r) => r.skills || []))];
 
   // Scroll lock effect
   useEffect(() => {
@@ -57,31 +65,63 @@ const ExperienceCard = ({ experience, index = 0 }) => {
             <div className="text-caption text-text-muted text-right flex-shrink-0 text-xs">{experience.date}</div>
           </div>
 
-          {/* Title and Company */}
-          <div className="space-y-0.5">
-            <h3 className="text-display text-lg leading-tight">{experience.title}</h3>
-            <p className="text-accent text-sm">{experience.company}</p>
-            {experience.location && (
-              <p className="text-caption text-text-muted text-xs">{experience.location}</p>
-            )}
-          </div>
+          {isMultiRole ? (
+            <>
+              {/* Company + location */}
+              <div className="space-y-0.5">
+                <h3 className="text-display text-lg leading-tight">{experience.company}</h3>
+                {experience.location && (
+                  <p className="text-caption text-text-muted text-xs">{experience.location}</p>
+                )}
+              </div>
 
-          {/* Brief Description - Max 3-4 lines with ellipsis */}
-          <p className="text-body text-sm leading-relaxed line-clamp-4 flex-grow">
-            {experience.description}
-          </p>
+              {/* Stacked roles with a LinkedIn-style progression line */}
+              <div className="flex-grow space-y-3 pt-0.5">
+                {roles.map((role, i) => (
+                  <div key={i} className="relative pl-5">
+                    {/* dot */}
+                    <span className="absolute left-0 top-1.5 w-2 h-2 rounded-full bg-accent-orange" />
+                    {/* connecting line to next role */}
+                    {i < roles.length - 1 && (
+                      <span className="absolute left-[3.5px] top-3.5 bottom-[-0.75rem] w-px bg-accent-orange/30" />
+                    )}
+                    <p className="text-accent text-sm font-medium leading-tight">{role.title}</p>
+                    <p className="text-caption text-text-muted text-xs">{role.date}</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Title and Company */}
+              <div className="space-y-0.5">
+                <h3 className="text-display text-lg leading-tight">{roles[0].title}</h3>
+                <p className="text-accent text-sm">{experience.company}</p>
+                {experience.location && (
+                  <p className="text-caption text-text-muted text-xs">{experience.location}</p>
+                )}
+              </div>
+
+              {/* Brief Description - Max 3-4 lines with ellipsis */}
+              {roles[0].description && (
+                <p className="text-body text-sm leading-relaxed line-clamp-4 flex-grow">
+                  {roles[0].description}
+                </p>
+              )}
+            </>
+          )}
 
           {/* Skills Preview - Show first 3 */}
-          {experience.skills && experience.skills.length > 0 && (
+          {allSkills.length > 0 && (
             <div className="flex flex-wrap gap-1.5 pt-1">
-              {experience.skills.slice(0, 3).map((skill, i) => (
+              {allSkills.slice(0, 3).map((skill, i) => (
                 <span key={i} className="px-2 py-0.5 bg-mono-gray-200 dark:bg-zinc-800 text-text-muted text-xs rounded-full">
                   {skill}
                 </span>
               ))}
-              {experience.skills.length > 3 && (
+              {allSkills.length > 3 && (
                 <span className="px-2 py-0.5 text-accent-orange text-xs font-medium">
-                  +{experience.skills.length - 3}
+                  +{allSkills.length - 3}
                 </span>
               )}
             </div>
@@ -147,30 +187,75 @@ const ExperienceCard = ({ experience, index = 0 }) => {
                     </span>
                     <span className="text-caption text-text-muted">{experience.date}</span>
                   </div>
-                  <h3 className="text-display text-2xl">{experience.title}</h3>
-                  <p className="text-accent text-lg">{experience.company}</p>
-                  {experience.location && (
-                    <p className="text-caption text-text-muted">{experience.location}</p>
+                  {isMultiRole ? (
+                    <>
+                      <h3 className="text-display text-2xl">{experience.company}</h3>
+                      {experience.location && (
+                        <p className="text-caption text-text-muted">{experience.location}</p>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="text-display text-2xl">{roles[0].title}</h3>
+                      <p className="text-accent text-lg">{experience.company}</p>
+                      {experience.location && (
+                        <p className="text-caption text-text-muted">{experience.location}</p>
+                      )}
+                    </>
                   )}
                 </div>
 
-                {/* Full Description */}
-                <div className="text-body leading-relaxed">
-                  {experience.description}
-                </div>
-
-                {/* All Skills */}
-                {experience.skills && experience.skills.length > 0 && (
-                  <div className="space-y-2">
-                    <div className="text-caption font-medium">Skills</div>
-                    <div className="flex flex-wrap gap-2">
-                      {experience.skills.map((skill, i) => (
-                        <span key={i} className="px-3 py-1 bg-mono-gray-100 dark:bg-zinc-800 text-text-muted text-sm rounded-full">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+                {isMultiRole ? (
+                  /* Roles as a vertical progression timeline */
+                  <div className="space-y-6">
+                    {roles.map((role, i) => (
+                      <div key={i} className="relative pl-6">
+                        {/* dot */}
+                        <span className="absolute left-0 top-1.5 w-2.5 h-2.5 rounded-full bg-accent-orange" />
+                        {/* connecting line */}
+                        {i < roles.length - 1 && (
+                          <span className="absolute left-[4.5px] top-4 bottom-[-1.5rem] w-px bg-accent-orange/30" />
+                        )}
+                        <h4 className="text-display text-lg leading-tight">{role.title}</h4>
+                        <p className="text-caption text-text-muted mb-2">{role.date}</p>
+                        {role.description && (
+                          <p className="text-body leading-relaxed">{role.description}</p>
+                        )}
+                        {role.skills && role.skills.length > 0 && (
+                          <div className="flex flex-wrap gap-2 pt-3">
+                            {role.skills.map((skill, j) => (
+                              <span key={j} className="px-3 py-1 bg-mono-gray-100 dark:bg-zinc-800 text-text-muted text-sm rounded-full">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
+                ) : (
+                  <>
+                    {/* Full Description */}
+                    {roles[0].description && (
+                      <div className="text-body leading-relaxed">
+                        {roles[0].description}
+                      </div>
+                    )}
+
+                    {/* All Skills */}
+                    {roles[0].skills && roles[0].skills.length > 0 && (
+                      <div className="space-y-2">
+                        <div className="text-caption font-medium">Skills</div>
+                        <div className="flex flex-wrap gap-2">
+                          {roles[0].skills.map((skill, i) => (
+                            <span key={i} className="px-3 py-1 bg-mono-gray-100 dark:bg-zinc-800 text-text-muted text-sm rounded-full">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </motion.div>

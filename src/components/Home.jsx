@@ -305,13 +305,32 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {[
               {
-                date: "Sep 2025 - Jan 2026",
-                title: "Undergraduate Research Assistant",
-                company: "ProtoLab, UC San Diego Design Lab",
-                location: "San Diego, California, United States • On-site",
-                type: "Part-time",
-                description: "Built audio processing pipeline with pyannote.ai + Whisper Large V3, optimized on A100 GPU (40% faster). Designed multi-agent conversational AI for mock interviews with configurable personas. Achieved 60-70% latency reduction through parallel processing pipeline. Compared OpenAI models, open-source LLMs + 11Labs, and NVIDIA ACE framework.",
-                skills: ["Audio Processing", "AI", "GPU Optimization", "Multi-agent Systems"]
+                date: "Jun 2026 - Present",
+                title: "AI Product Builder",
+                company: "BCG X",
+                location: "San Francisco, California, United States",
+                type: "Internship",
+                skills: ["AI Product", "GenAI", "Product Strategy", "Prototyping"]
+              },
+              {
+                date: "Oct 2025 - Present",
+                company: "DS3 UCSD - DataHacks Board",
+                location: "La Jolla, California, United States • On-site",
+                type: "Extracurricular",
+                roles: [
+                  {
+                    date: "Apr 2026 - Present",
+                    title: "Hackathon Co-Director",
+                    description: "Co-directed a 100-person, defense-oriented hackathon run in partnership with Bow Capital and the Startup Incubator Club. Owned end-to-end event organization — partnerships, sponsorship, logistics, and judging — bringing together students, VCs, and industry around defense-focused builds.",
+                    skills: ["Event Leadership", "Partnerships", "Defense Tech", "Operations"]
+                  },
+                  {
+                    date: "Oct 2025 - Apr 2026",
+                    title: "Lead Board Member",
+                    description: "Developed the judging platform and worked on the programming competition.",
+                    skills: ["Event Management", "Leadership", "Community Building"]
+                  }
+                ]
               },
               {
                 date: "Feb 2025 - Present",
@@ -323,6 +342,15 @@ const Home = () => {
                 skills: ["NLP", "Knowledge Graphs", "Python", "Automation", "Data Extraction"]
               },
               {
+                date: "2025 - Present",
+                title: "Undergraduate Research Assistant",
+                company: "MOSAIC Lab, UC San Diego",
+                location: "La Jolla, California, United States • On-site",
+                type: "Part-time",
+                description: "Conducting research on biosensor technologies for health monitoring and physiological signal processing under Prof. Tauhidur Rahman (mentored by PhD candidate Rahath Malladi). Focused on biosensor development and signal processing for wearable health sensing.",
+                skills: ["Biosensors", "Signal Processing", "Wearable Computing", "Health Sensing", "Python"]
+              },
+              {
                 date: "Oct 2025 - Present",
                 title: "EMG Translator Project Lead",
                 company: "Triton NeuroTech",
@@ -332,13 +360,13 @@ const Home = () => {
                 skills: ["EMG", "ML", "Team Leadership", "Arduino", "ESP32"]
               },
               {
-                date: "Oct 2025 - Present",
-                title: "Lead Board Member",
-                company: "DS3 UCSD - DataHacks Board",
-                location: "La Jolla, California, United States • On-site",
-                type: "Extracurricular",
-                description: "Organizing data science hackathons and programming competitions. Handling logistics for university-wide events.",
-                skills: ["Event Management", "Leadership", "Community Building"]
+                date: "Sep 2025 - Jan 2026",
+                title: "Undergraduate Research Assistant",
+                company: "ProtoLab, UC San Diego Design Lab",
+                location: "San Diego, California, United States • On-site",
+                type: "Part-time",
+                description: "Built audio processing pipeline with pyannote.ai + Whisper Large V3, optimized on A100 GPU (40% faster). Designed multi-agent conversational AI for mock interviews with configurable personas. Achieved 60-70% latency reduction through parallel processing pipeline. Compared OpenAI models, open-source LLMs + 11Labs, and NVIDIA ACE framework.",
+                skills: ["Audio Processing", "AI", "GPU Optimization", "Multi-agent Systems"]
               },
               {
                 date: "Jun 2025 - Sep 2025",
