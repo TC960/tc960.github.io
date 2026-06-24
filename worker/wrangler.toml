@@ -1,0 +1,18 @@
+name = "analytics-proxy"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# --- Configuration -----------------------------------------------------------
+# These two are NOT secret (the site tag is already public in your HTML beacon,
+# and the account id is not sensitive on its own). Fill in your account id.
+#
+# The API token IS secret — do NOT put it here. Set it with:
+#   cd worker && npx wrangler secret put CF_API_TOKEN
+# (create the token in Cloudflare dash → My Profile → API Tokens, with the
+#  "Account Analytics → Read" permission for your account.)
+[vars]
+CF_ACCOUNT_ID = "68301fd7a97e30fe00a19ff511d35d55"
+CF_SITE_TAG   = "e7bc0f96f4e84ad9b4f8067446c17d5a"
+
+# Origins allowed to read the proxy (your site + local dev).
+ALLOWED_ORIGINS = "https://www.mohakprakash.com,https://mohakprakash.com,http://localhost:5173"
