@@ -1,5 +1,16 @@
 [
   {
+    "id": "winnow",
+    "title": "Winnow",
+    "category": ["ml", "nlp", "fullstack", "research"],
+    "year": 2026,
+    "description": "LLM prompt-compression engine that turns voice, RAG context, and long documents into the cheapest possible context — losing words, keeping meaning. It runs multiple compressors in parallel across two orthogonal axes (token-space and model-space), showing live diffs, token counts, and dollar savings between the original and compressed prompt.",
+    "fullDescription": "Built at the UC Berkeley AI Hackathon '26, Winnow attacks token waste in LLM billing by exploiting three kinds of redundancy — low-information tokens, irrelevant retrieved passages, and excessive KV-cache bit-width — with a pipeline that fans multiple compressors out concurrently instead of betting on a single technique. It compresses along two orthogonal axes. Token-space uses two independent compressor families: LLMLingua-2 + LongLLMLingua (an extractive token classifier built on a fine-tuned XLM-RoBERTa, combined with query-aware BGE cross-encoder reranking and causal-perplexity compression) and AttentionRAG (which reformulates a query into an incomplete-answer template, runs next-token prediction over context chunks, and ranks tokens by focal-token attention). Model-space offers black-box routing to Claude or GPT, self-hosted Qwen with TurboQuant KV-cache compression (~4-bit Lloyd-Max Gaussian quantization implemented as a drop-in DynamicCache subclass), and an LCLM + TurboQuant path that stacks latent context compression with bit-width reduction. The engineering core is an order-preserving merge engine in pure Python that reconciles heterogeneous compressors with different tokenization schemes via canonical character-span alignment — normalizing labels, reconstructing char spans, testing sentence-span overlaps, and preserving original spacing to produce union/intersection compressions without destroying text. Infrastructure is Modal A100 GPU workers behind FastAPI, models loaded once at startup to kill cold-start cost; the /compress endpoint fans LLMLingua and AttentionRAG concurrently with merging, while /generate routes between Qwen-TurboQuant and LCLM-TurboQuant workers on an lclm flag. A Next.js frontend (Deepgram for voice-in) exposes a Test tab for PDF/voice uploads with live compression visualization and a Playground for tweaking algorithms, surfacing live diffs, token counts, savings percentages, cost savings, and A/B Q&A boxes comparing answers from original vs. compressed prompts. Grounded in six papers (LLMLingua-2, LongLLMLingua, AttentionRAG, LCLM, TurboQuant, CompactPrompt); validated end-to-end TurboQuant delivered 3–4× KV compression while matching FP16 output.",
+    "tech": ["Modal", "FastAPI", "Next.js", "PyTorch", "Hugging Face Transformers", "LLMLingua-2", "LongLLMLingua", "AttentionRAG", "LCLM", "TurboQuant", "BGE Reranker", "XLM-RoBERTa", "Qwen", "Claude API", "GPT", "Deepgram", "TypeScript", "Tailwind", "A100 GPU"],
+    "categoryDisplay": "ML/LLM INFRA",
+    "links": { "devpost": "https://devpost.com/software/winnow-dzb281", "code": "https://github.com/TC960/winnow" }
+  },
+  {
     "id": "voicecursor",
     "title": "VoiceCursor",
     "category": ["fullstack", "nlp", "ml"],
