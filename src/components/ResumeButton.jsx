@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const ResumeButton = ({
   usResumeUrl = "/mohak_resume.pdf",
-  ukResumeUrl = "/mohak_resume.pdf"
+  ukResumeUrl = "/mohak_resume_uk.pdf"
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
