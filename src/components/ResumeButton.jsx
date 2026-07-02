@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ResumeButton = ({
-  usResumeUrl = "https://drive.google.com/file/d/1KrOenmBpxeg0CTAeOI8T36AJJN3q0uO-/view?usp=sharing",
-  ukResumeUrl = "https://drive.google.com/file/d/1KrOenmBpxeg0CTAeOI8T36AJJN3q0uO-/view?usp=sharing"
+  usResumeUrl = "/mohak_resume.pdf",
+  ukResumeUrl = "/mohak_resume.pdf"
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
