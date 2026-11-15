@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Replicating an rTMS Biomarker | Mohak Prakash</title>
+  <meta name="description" content="A replication of the DLPFC-sgACC connectivity biomarker for rTMS response in depression, and why the dataset's best-looking accuracy is circular." />
+  <meta name="author" content="Mohak Akul Prakash" />
+  <link rel="icon" type="image/jpeg" href="/favicon_new.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Same tokens as the rest of mohakprakash.com (src/index.css): ink on paper. */
+    :root {
+      --bg: #f6f1e7;
+      --surface: #eee6d8;
+      --ink: #231c16;
+      --text: #4a4037;
+      --muted: #75685a;
+      --rule: #ddd2c1;
+      --accent: #2d4f7c;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      position: relative;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Newsreader, ui-serif, Georgia, serif;
+      font-optical-sizing: auto;
+      font-size: 19px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    /* Graph-paper grid fading out from the top, plus fixed paper grain. */
+    body::before {
+      content: ""; position: absolute; inset: 0 0 auto 0; height: 760px; z-index: -1; pointer-events: none;
+      background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px);
+      background-size: 28px 28px;
+      background-position: center top;
+      -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
+      mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    a { color: var(--accent); text-decoration: underline 1px; text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent); text-underline-offset: 3px; }
+    a:hover { text-decoration-color: var(--accent); }
+    .caps, .mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 13px; color: var(--muted); }
+
+    .site-header { max-width: 720px; margin: 0 auto; padding: 32px 24px 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+    .site-header .name { font-weight: 500; font-size: 19px; color: var(--ink); text-decoration: none; }
+    .site-header nav { display: flex; gap: 20px; }
+    .site-header nav a { font-family: Newsreader, ui-serif, Georgia, serif; font-size: 16px; color: var(--text); text-decoration: none; }
+    .site-header a:hover { color: var(--accent); }
+
+    main { max-width: 720px; margin: 0 auto; padding: 80px 24px 0; }
+    .eyebrow { margin-top: 0; }
+    h1, h2 { color: var(--ink); font-weight: 500; line-height: 1.15; letter-spacing: -0.012em; }
+    h1 { font-size: clamp(34px, 6vw, 48px); margin-top: 14px; text-wrap: balance; }
+    h2 { font-size: 26px; font-style: italic; font-weight: 400; margin-top: 48px; margin-bottom: 4px; }
+    .meta { margin-top: 16px; font-size: 17px; font-style: italic; color: var(--muted); }
+    .diamond { display: none; }
+    p { margin-top: 14px; }
+    strong { color: var(--ink); font-weight: 500; }
+    ul { margin-top: 12px; padding-left: 22px; }
+    li { margin-top: 8px; }
+    li::marker { color: var(--muted); }
+    .tldr { margin-top: 40px; padding: 4px 0 4px 22px; border-left: 2px solid var(--accent); }
+    .tldr h2 { margin-top: 0; font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-style: normal; font-size: 13px; letter-spacing: 0.04em; color: var(--accent); }
+    .tldr ul { margin-top: 6px; }
+    .stat { font-variant-numeric: tabular-nums; }
+    figure { margin-top: 28px; }
+    figure img { display: block; max-width: 100%; height: auto; margin: 0 auto; background: #ffffff; border: 1px solid var(--rule); padding: 8px; }
+    figcaption { margin-top: 10px; font-size: 16px; font-style: italic; color: var(--muted); text-align: center; }
+    .refs { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 16px; color: var(--muted); }
+    .refs h2 { margin-top: 0; font-size: 20px; }
+    .refs ol { margin-top: 8px; padding-left: 22px; }
+    code { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 0.78em; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+    footer { max-width: 720px; margin: 96px auto 0; padding: 24px 24px 48px; border-top: 1px solid var(--rule); }
+    footer a { font-size: 16px; color: var(--text); text-decoration: none; margin-right: 20px; }
+    footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="name" href="/">Mohak Prakash</a>
+    <nav>
+      <a href="/projects">Projects</a>
+      <a href="/research">Research</a>
+      <a href="/#writing">Writing</a>
+      <a href="/mohak_resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+    </nav>
+  </header>
+  <main>
+  <article>
+
+    <p class="eyebrow mono">Case study, neural data science</p>
+    <h1>Replicating an rTMS biomarker, and catching a circular result</h1>
+    <p class="meta">Mohak Prakash, COGS 138 (Neural Data Science), UC San Diego, 2026</p>
+
+    <section class="tldr">
+      <h2>TL;DR</h2>
+      <ul>
+        <li>The widely cited DLPFC-sgACC connectivity biomarker for rTMS response <strong>did not replicate</strong> on a public dataset (r = +0.14, p = 0.27, and the sign points the wrong way).</li>
+        <li>The dataset's best-looking result, <strong>AUC 0.914</strong>, comes from features that were defined using the same outcome labels it predicts. That is circular analysis, so it is not an out-of-sample estimate.</li>
+        <li>A non-circular version, using features the original authors derived on a training split only, still reaches <strong>AUC 0.903 on 18 held-out patients</strong>. So the honest claim is not "there is nothing here", but "the 0.914 can't be read as accuracy."</li>
+      </ul>
+    </section>
+
+    <h2>The question</h2>
+    <p>rTMS helps some people with treatment-resistant depression and does nothing for others, and there is no reliable way to tell in advance who will respond. The most-cited candidate predictor comes from Fox et al. (2012): DLPFC stimulation sites that are more anticorrelated with the subgenual anterior cingulate cortex (sgACC) were associated with better outcomes.</p>
+    <p>Fox's analysis was at the level of stimulation sites, using normative connectivity from a separate healthy cohort. It never compared an individual patient's own connectivity against that patient's own outcome. The field has since stretched it into an individual-level predictor, and that stretch is what I tested.</p>
+
+    <h2>The data</h2>
+    <p>Hopman et al. (2021) released pre-treatment resting-state connectivity and MADRS outcomes for patients treated with rTMS for treatment-resistant depression. A responder is a patient with at least a 50% MADRS reduction at week 12. The analysis sample is <span class="stat">n = 61</span> (33 responders, 28 non-responders).</p>
+    <p>Two subjects have connectivity data but no week-12 score. A naive <code>pct_change &gt;= 50</code> would silently label them non-responders, because <code>NaN &gt;= 50</code> evaluates to false, even though their week-4 improvements were 100% and 85%. I excluded them explicitly, matching how the original authors coded them.</p>
+
+    <h2>Finding 1: the biomarker doesn't replicate</h2>
+    <p>DLPFC-sgACC connectivity shows no meaningful relationship with improvement: <span class="stat">r = +0.144 (permutation p = 0.267)</span>, with a cross-validated AUC of 0.613 (p = 0.071). The global-signal-regression variant is weaker still (r = +0.064, p = 0.602). The original Hopman authors also could not confirm the link.</p>
+    <figure>
+      <img src="fox_check.png" alt="Scatter plot of DLPFC-sgACC connectivity against MADRS reduction, with a nearly flat, slightly positive regression line." width="750" height="600" loading="lazy" />
+      <figcaption>Blue: responders. Gray: non-responders. Fox predicts a negative slope; the fit is flat and slightly positive.</figcaption>
+    </figure>
+    <p>Two caveats keep this honest. First, a positive r means less anticorrelation goes with slightly better response, the opposite of Fox's prediction, so this is not a near miss. Second, at n = 61 the study only has 80% power for |r| &ge; 0.35. This is absence of evidence at the effect size the dataset can detect, not proof of no effect.</p>
+    <p>Screening all six label-independent connectivity features in the release, the strongest was not the Fox feature but a sgACC-to-middle-frontal-gyrus measure (r = +0.32, p = 0.012 uncorrected). It does not survive correction for six tests (p = 0.070), so it is a lead, not a finding.</p>
+
+    <h2>Finding 2: the 0.914 is circular</h2>
+    <p>The release also includes four seed-based features from a sheet named <code>SBA_RvsN</code>, for "responders versus non-responders." Those clusters were located by contrasting the two outcome groups in this same sample. A random forest on them reaches <span class="stat">AUC 0.914</span>, and one cluster alone reaches 0.870. A multivariate model that barely beats one pre-selected cluster is what selection on the outcome looks like.</p>
+    <p>To show the mechanism directly, I generated 200 pure-noise features for the same 61 patients, kept the top 4, and cross-validated two ways, averaged over 50 independent noise draws:</p>
+    <figure>
+      <img src="noise_proof.png" alt="Bar chart: leaky feature selection gives AUC 0.786 on pure noise, while selection inside each training fold gives 0.472, near chance." width="600" height="570" loading="lazy" />
+      <figcaption>Selecting features on the full sample manufactures AUC 0.786 from noise. Selecting inside each training fold gives 0.472. Leaky beat honest in 50 of 50 draws.</figcaption>
+    </figure>
+    <p>This is double dipping in the sense of Kriegeskorte et al. (2009). The exact size of the inflation depends on how many features are screened and kept, so only the gap between the two bars is meaningful, not its level.</p>
+
+    <h2>Finding 3: but there may be real signal</h2>
+    <p>The authors were not naive about this. They also released a version of the seed-based contrast computed on a training subset only, with their own 42/18 split. Training on those 42 and testing on the 18 patients never used to define the features gives <span class="stat">held-out AUC 0.903 (permutation p = 0.002)</span>.</p>
+    <p>That changes the right conclusion. The 0.914 still can't be read as out-of-sample accuracy, but the regions may carry real signal. The held-out check is fragile, with 18 patients, only 6 responders, and an unstratified split, so it is a reason for a properly powered replication, not a result to build on.</p>
+    <p>I also compared predicting the binary responder label against predicting continuous MADRS improvement, on the same features and folds, as an adaptation of the dimensional framing in Wade et al. (2025). On the honest feature both sat at chance and the difference was not detectable (+0.012 AUC, p = 0.34), which says more about this dataset's power than about the idea.</p>
+
+    <h2>What I'd do next</h2>
+    <ul>
+      <li>Re-derive the seed clusters from the released whole-brain connectivity maps <strong>inside each training fold</strong>, which would replace the noise simulation with the real thing.</li>
+      <li>Test pre-registered, label-independent features on a larger cohort such as EMBARC (n &gt; 200), where effects this small could actually be detected.</li>
+    </ul>
+    <p>The contribution here isn't the null result by itself. It's showing why the one impressive number in the dataset can't be believed as stated, and what the honest version of it looks like.</p>
+
+    <section class="refs">
+      <h2>References</h2>
+      <ol>
+        <li>Fox, M. D., et al. (2012). Efficacy of TMS targets for depression is related to intrinsic functional connectivity with the subgenual cingulate. <em>Biological Psychiatry</em>, 72(7), 595-603. <a href="https://doi.org/10.1016/j.biopsych.2012.04.028">doi</a></li>
+        <li>Hopman, H. J., et al. (2021). Personalized prediction of transcranial magnetic stimulation clinical response in patients with treatment-refractory depression using neuroimaging biomarkers and machine learning. <em>Journal of Affective Disorders</em>, 290, 261-271. <a href="https://doi.org/10.1016/j.jad.2021.04.081">doi</a></li>
+        <li>Hopman, H. J., et al. (2021). Data for: personalized prediction of transcranial magnetic stimulation clinical response. <em>Data in Brief</em>, 37, 107264. <a href="https://doi.org/10.1016/j.dib.2021.107264">doi</a></li>
+        <li>Kriegeskorte, N., et al. (2009). Circular analysis in systems neuroscience: the dangers of double dipping. <em>Nature Neuroscience</em>, 12(5), 535-540. <a href="https://doi.org/10.1038/nn.2303">doi</a></li>
+        <li>Wade, B. S. C., et al. (2025). Predicting dimensional antidepressant response to repetitive transcranial magnetic stimulation using pretreatment resting-state functional connectivity. <em>Nature Mental Health</em>, 3, 1046-1056. <a href="https://doi.org/10.1038/s44220-025-00469-5">doi</a></li>
+      </ol>
+    </section>
+  </article>
+  </main>
+  <footer>
+    <a href="mailto:mprakash@ucsd.edu">Email</a>
+    <a href="https://www.linkedin.com/in/mohakap/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://github.com/tc960" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </footer>
+</body>
+</html>

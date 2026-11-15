@@ -11,15 +11,59 @@
     "links": { "devpost": "https://devpost.com/software/winnow-dzb281", "code": "https://github.com/TC960/winnow" }
   },
   {
-    "id": "voicecursor",
-    "title": "VoiceCursor",
-    "category": ["fullstack", "nlp", "ml"],
+    "id": "trickle",
+    "title": "Trickle",
+    "category": ["ml", "research"],
+    "year": 2026,
+    "description": "Bounded-memory inference for 1.58-bit ternary LLMs: runs a transformer one layer at a time from disk, keeping peak resident weights under a byte budget, with output proven bit-identical to conventional loading.",
+    "fullDescription": "Targets an 8 GB NVIDIA Jetson Orin Nano; development and all current measurements are on Apple Silicon (M5 Max). Ternary quantization stores each weight as -1, 0, or +1 plus a shared scale, roughly 8x smaller than bf16, and layer streaming loads one layer off disk at a time, so the two compound: a BitNet-2B layer shrinks from about 139 MB in bf16 to about 17 MB. On microsoft/bitnet-b1.58-2B-4T, every completion is token-identical to the unstreamed reference (max difference 0 across all 30 decoder layers, embeddings, and logits). Under a 0.05 GB weight budget it runs at 4.36 tok/s with 0.69 GB peak RSS, against 7.68 tok/s when nothing is evicted: a 1.8x throughput penalty for 24x more I/O, because a background prefetch thread hides most of the read latency. Block-wise quantization-aware distillation on SmolLM2-135M raises mean output cosine from 0.871 (naive post-training rounding) to 0.958.",
+    "tech": ["Python", "BitNet b1.58", "Ternary Quantization", "Layer Streaming", "Quantization-Aware Distillation", "Apple Silicon", "NVIDIA Jetson"],
+    "categoryDisplay": "ML SYSTEMS",
+    "links": { "code": "https://github.com/TC960/trickle" }
+  },
+  {
+    "id": "datahacks-platform",
+    "title": "DataHacks Platform",
+    "category": ["fullstack", "data"],
+    "year": 2026,
+    "description": "Production suite behind DataHacks: the application portal, a check-in platform for hackers, judges, and mentors, and the judging platform, with QR codes generated automatically on application release.",
+    "fullDescription": "I directed the team's web development. The application portal runs on Supabase with versioned migrations, and applications live in a production database plus a copy database so live data stays safe. The check-in platform covers hackers, judges, and mentors, and the judging platform runs on Databricks and Supabase. When applications are released, QR codes are generated automatically.",
+    "tech": ["React", "TypeScript", "Supabase", "PostgreSQL", "Supabase Edge Functions", "Databricks", "TanStack Query", "Zod"],
+    "categoryDisplay": "PLATFORM / DATA INFRA",
+    "links": { "code": "https://github.com/ucsdds3/datahacks" }
+  },
+  {
+    "id": "ds3-sprint-board",
+    "title": "DS3 Sprint Board + MCP Connector",
+    "category": ["fullstack"],
+    "year": 2026,
+    "description": "Club-wide sprint board for DS3's board and executives, with an MCP connector so members can create, move, and review tasks from Claude Code, Claude Desktop, and ChatGPT on the web.",
+    "fullDescription": "I worked on the sprint board and its MCP connector for the Data Science Student Society at UC San Diego. Tasks move from to-do to in progress to pending review to done, are capped at five expected hours so bigger work gets split, need actual hours logged before they can be closed, and are approved by a named reviewer. Creating a task or sending one for review emails the people involved, the same as the website does.",
+    "tech": ["MCP", "Claude Code", "Claude Desktop", "ChatGPT"],
+    "categoryDisplay": "CLUB TOOLING / MCP",
+    "links": {  }
+  },
+  {
+    "id": "wavcursor",
+    "title": "WavCursor",
+    "category": [
+      "fullstack",
+      "nlp",
+      "ml"
+    ],
     "year": 2026,
     "description": "Voice-first capture system that turns spoken thoughts into organized, triaged tasks straight from your phone — no app to install. Speak a brain-dump or full meeting minutes and they land structured and sorted on the other side. The friction between having a thought and capturing it should be zero.",
-    "fullDescription": "Voice-first task capture built in an evening at a Voice Cursor hackathon. Rather than inventing a new primitive, it stitches existing tools into an end-to-end pipeline: voice goes in through Voice Cursor (no external app required), is handed off via a Telegram OpenClaw agent, and written into a Convex database as raw jobs. A Node.js agent sits on top of Convex and actively pulls new tasks as they arrive, routing them into a Notion database where Notion AI sorts, categorizes, and cleans them up. The result surfaces in a custom UI with tasks already organized, so the messy stream of speech becomes a tidy, prioritized list without the user lifting a finger.",
-    "tech": ["Voice Cursor", "Telegram", "OpenClaw", "Convex", "Node.js", "Notion AI"],
+    "fullDescription": "Voice-first task capture built in an evening at a WavCursor hackathon. Rather than inventing a new primitive, it stitches existing tools into an end-to-end pipeline: voice goes in through WavCursor (no external app required), is handed off via a Telegram OpenClaw agent, and written into a Convex database as raw jobs. A Node.js agent sits on top of Convex and actively pulls new tasks as they arrive, routing them into a Notion database where Notion AI sorts, categorizes, and cleans them up. The result surfaces in a custom UI with tasks already organized, so the messy stream of speech becomes a tidy, prioritized list without the user lifting a finger.",
+    "tech": [
+      "WavCursor",
+      "Telegram",
+      "OpenClaw",
+      "Convex",
+      "Node.js",
+      "Notion AI"
+    ],
     "categoryDisplay": "AI/PRODUCTIVITY",
-    "award": "🏆 Voice Cursor Hackathon",
+    "award": "🏆 WavCursor Hackathon",
     "links": {}
   },
   {
@@ -27,11 +71,11 @@
     "title": "rTMS Depression Biomarker Replication",
     "category": ["ml", "data", "research"],
     "year": 2026,
-    "description": "Neural-data-science replication (COGS 138) that re-analyzes a public TMS-for-depression fMRI dataset and shows its headline ~0.91 'high accuracy' result is an artifact of circular feature selection — honest in-fold selection collapses it to chance. The famous Fox DLPFC–sgACC connectivity biomarker does not replicate.",
-    "fullDescription": "Single-author COGS 138 final project re-analyzing a public rTMS-for-depression fMRI dataset (63 subjects, 33 responders / 30 non-responders; responder = ≥50% MADRS reduction at week 12) to test whether a famous connectivity biomarker replicates — and to demonstrate that the dataset's headline 'high accuracy' result is an artifact of circular analysis (double-dipping, citing Kriegeskorte 2009). A linear four-step Python pipeline: (1) load and align connectivity features from Excel sheets, normalizing subject IDs; (2) a Fox sanity check — Pearson r vs continuous % MADRS change with 1000-permutation p-values plus 5-fold out-of-fold logistic-regression AUC — finding the Fox DLPFC–sgACC anticorrelation does NOT replicate (r = +0.14, p = 0.27; AUC = 0.60 in the CC variant, near chance in GSR); (3) a binary-vs-dimensional comparison with RandomForest classifier and regressor over identical RepeatedStratifiedKFold (5×10) splits; and (4) a leakage proof: 200 pure-noise features show that selecting features on the full sample manufactures AUC ≈ 0.71 from nothing, while honest in-fold selection collapses to chance (0.45) — the exact mechanism inflating the dataset's seed-set 0.91, since those seeds were defined by contrasting responders vs non-responders in the same sample. The 'failure' is the result: a null replication plus a caught trap, with fixed-seed reproducibility and permutation testing throughout.",
+    "description": "Neural-data-science replication (COGS 138) on a public rTMS-for-depression fMRI dataset. The famous Fox DLPFC-sgACC connectivity biomarker does not replicate, and the dataset's best-looking result (AUC 0.914) comes from features defined on the same outcome labels, so it is circular rather than an out-of-sample estimate.",
+    "fullDescription": "Single-author COGS 138 final project re-analyzing the public Hopman et al. (2021) rTMS-for-depression fMRI dataset (n = 61 with a week-12 outcome: 33 responders, 28 non-responders; responder = 50%+ MADRS reduction at week 12). (1) Fox sanity check: Pearson r against continuous MADRS change with permutation p-values plus out-of-fold logistic-regression AUC. The DLPFC-sgACC biomarker does not replicate (r = +0.144, p = 0.267; AUC 0.613), and the sign is opposite to Fox's prediction. (2) A screen of all six label-independent connectivity features with Bonferroni and BH correction. (3) A binary-vs-dimensional comparison with a RandomForest classifier and regressor on identical RepeatedStratifiedKFold splits, which is inconclusive at this sample size. (4) A leakage proof: across 50 draws of 200 pure-noise features, selecting on the full sample manufactures AUC 0.786 while in-fold selection stays at chance (0.472), the mechanism behind the seed-set AUC 0.914, whose clusters were defined by contrasting responders and non-responders in the same sample. (5) The honest check: the authors' own train-only features on their 42/18 split reach held-out AUC 0.903 (p = 0.002) on 18 patients, so the regions may carry real signal even though the 0.914 cannot be read as accuracy.",
     "tech": ["Python", "scikit-learn", "scipy", "pandas", "NumPy", "matplotlib", "Random Forest", "fMRI", "Permutation Testing"],
     "categoryDisplay": "DATA SCIENCE / NEURO",
-    "links": {}
+    "links": { "blog": "/writing/rtms-replication/" }
   },
   {
     "id": "datahacks-judging-platform",
@@ -129,7 +173,7 @@
     "description": "AI-powered tax filing web application with document upload, voice assistance, and real-time analytics. Features OCR, MongoDB storage, and RAG system.",
     "tech": ["React", "MongoDB", "OCR", "Twilio"],
     "categoryDisplay": "FULL-STACK",
-    "award": "🏆 Hacklytics '24",
+    "award": "🏆 3rd place, Hacklytics '25",
     "links": { "demo": "#", "code": "#" }
   },
   {

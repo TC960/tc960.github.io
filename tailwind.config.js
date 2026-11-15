@@ -4,10 +4,20 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class', // Use class-based dark mode instead of media query
+  darkMode: 'class', // light-only theme; nothing adds the class
   theme: {
     extend: {
       colors: {
+        site: {
+          bg: 'var(--bg)',
+          surface: 'var(--surface)',
+          ink: 'var(--ink)',
+          soft: 'var(--ink-soft)',
+          muted: 'var(--muted)',
+          rule: 'var(--rule)',
+          accent: 'var(--accent)',
+          link: 'var(--link)',
+        },
         // Monochrome foundation
         'mono': {
           white: '#ffffff',
@@ -44,9 +54,11 @@ export default {
         },
       },
       fontFamily: {
-        'sans': ['Inter', 'system-ui', 'sans-serif'], // Default body font
-        'display': ['Space Grotesk', 'Inter', 'sans-serif'], // Headings and display text
-        'mono': ['JetBrains Mono', 'monospace'],
+        // Ink-on-paper type: Newsreader for all text, IBM Plex Mono for dates and metadata.
+        'sans': ['Newsreader', 'ui-serif', 'Georgia', 'serif'],
+        'serif': ['Newsreader', 'ui-serif', 'Georgia', 'serif'],
+        'display': ['Newsreader', 'ui-serif', 'Georgia', 'serif'],
+        'mono': ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       backdropBlur: {
         'glass': '20px',

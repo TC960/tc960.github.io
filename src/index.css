@@ -1,352 +1,193 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+/*
+ * Ink on paper: warm off-white ground, near-black ink, one fountain-pen blue
+ * accent. No panels or ornaments; hierarchy comes from type and whitespace.
+ */
+:root {
+  --bg: #f6f1e7;
+  --surface: #eee6d8;
+  --ink: #231c16;
+  --ink-soft: #4a4037;
+  --muted: #75685a;
+  --rule: #ddd2c1;
+  --accent: #2d4f7c;
+  --link: #2d4f7c;
+  color-scheme: light;
+}
 
+@layer base {
   html {
     @apply scroll-smooth antialiased;
   }
 
   body {
-    @apply font-sans bg-background-primary text-text-primary leading-relaxed antialiased;
-    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+    @apply bg-site-bg font-serif text-site-soft;
+    font-size: 18px;
+    line-height: 1.65;
+    font-optical-sizing: auto;
   }
 
-  /* Typography hierarchy */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-medium tracking-tight;
+  h1, h2, h3 {
+    @apply font-serif text-site-ink;
+    font-weight: 500;
     line-height: 1.2;
+    letter-spacing: -0.012em;
   }
 
-  h1 {
-    @apply text-4xl md:text-6xl lg:text-7xl;
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
   }
 
-  h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl;
-  }
-
-  h3 {
-    @apply text-2xl md:text-3xl;
-  }
-
-  p {
-    @apply leading-relaxed;
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 }
 
 @layer components {
-  /* Sophisticated button styles */
-  .btn-primary {
-    @apply inline-flex items-center px-6 py-3 text-mono-white bg-accent-orange font-medium text-sm tracking-wide transition-all duration-300 hover:bg-accent-orange-dark hover:shadow-accent-hover active:transform active:scale-[0.98];
+  /* Single reading column used by every page. */
+  .page {
+    @apply mx-auto w-full max-w-[720px] px-5 sm:px-6;
   }
 
-  .btn-secondary {
-    @apply inline-flex items-center px-6 py-3 text-text-primary bg-transparent border border-mono-gray-300 font-medium text-sm tracking-wide transition-all duration-300 hover:bg-mono-gray-50 hover:border-accent-orange hover:text-accent-orange active:transform active:scale-[0.98];
+  /* Home page: same column, plus room for the pinned brain on wide screens. */
+  .page-wide {
+    @apply mx-auto w-full max-w-[720px] px-5 sm:px-6 min-[1200px]:max-w-[1180px];
   }
 
-  .btn-ghost {
-    @apply inline-flex items-center px-4 py-2 text-text-secondary font-medium text-sm tracking-wide transition-all duration-300 hover:text-accent-orange hover:bg-mono-gray-50 active:transform active:scale-[0.98];
+  /* Dates, years, small metadata. */
+  .mono {
+    @apply font-mono text-[12.5px] leading-[1.5] text-site-muted;
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Card components with subtle shadows */
-  .card {
-    @apply bg-background-primary border border-mono-gray-200 rounded-xl transition-all duration-300 hover:shadow-soft hover:border-mono-gray-300;
+  .link {
+    @apply text-site-link underline decoration-1 underline-offset-[3px];
+    text-decoration-color: color-mix(in srgb, var(--link) 35%, transparent);
+  }
+  .link:hover {
+    text-decoration-color: var(--link);
   }
 
-  .card-elevated {
-    @apply bg-background-primary shadow-minimal border border-mono-gray-200 rounded-xl transition-all duration-300 hover:shadow-xl hover:border-mono-gray-300;
-  }
-
-  /* Navigation */
-  .nav-scrolled {
-    @apply bg-white/95 backdrop-blur-sm border-b border-mono-gray-200;
-  }
-  
-  .dark .nav-scrolled {
-    @apply bg-black/95 border-black;
-  }
-  
-  .nav-link {
-    @apply relative text-text-secondary font-medium text-sm tracking-wide transition-all duration-300 hover:text-text-primary;
-  }
-
-  .nav-link.active {
-    @apply text-accent-orange;
-  }
-
-  .nav-link::after {
-    @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-orange transition-all duration-300;
-    content: '';
-  }
-
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    @apply w-full;
-  }
-
-  /* Form elements */
-  .form-input {
-    @apply w-full px-4 py-3 bg-background-secondary border border-mono-gray-300 text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-orange focus:ring-1 focus:ring-accent-orange transition-all duration-300;
-  }
-
-  .form-textarea {
-    @apply w-full px-4 py-3 bg-background-secondary border border-mono-gray-300 text-text-primary placeholder-text-muted resize-none focus:outline-none focus:border-accent-orange focus:ring-1 focus:ring-accent-orange transition-all duration-300;
-  }
-
-  /* Section spacing with generous whitespace */
   .section {
-    @apply py-20 lg:py-32;
+    @apply mt-20 border-t border-site-rule pt-10;
   }
 
-  .section-header {
-    @apply mb-16 lg:mb-24;
+  .section-title {
+    @apply mb-8 font-serif text-[28px] font-normal italic text-site-ink;
   }
 
-  /* Container with asymmetrical max-widths */
-  .container-narrow {
-    @apply max-w-2xl mx-auto px-6;
+  /* Date on the left, content on the right; stacks on phones. */
+  .entry {
+    @apply grid gap-x-8 gap-y-1 py-5 sm:grid-cols-[132px_1fr];
+  }
+  .entry > .mono {
+    @apply sm:pt-[5px];
   }
 
-  .container-medium {
-    @apply max-w-4xl mx-auto px-6;
+  .entry-title {
+    @apply text-[21px];
   }
 
-  .container-wide {
-    @apply max-w-6xl mx-auto px-6;
+  /* Expandable "more" text: hide the default marker, show our own. */
+  .more > summary {
+    @apply mt-1 cursor-pointer list-none font-mono text-[12.5px] text-site-muted hover:text-site-accent;
   }
-
-  /* Asymmetrical grid layouts */
-  .grid-asymmetric {
-    @apply grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16;
+  .more > summary::-webkit-details-marker {
+    display: none;
   }
-
-  .grid-asymmetric .content-main {
-    @apply lg:col-span-8;
+  .more > summary::after {
+    content: "More";
   }
-
-  .grid-asymmetric .content-sidebar {
-    @apply lg:col-span-4;
-  }
-
-  /* Text styles with intentional hierarchy */
-  .text-display {
-    @apply font-display text-text-primary;
-  }
-
-  .text-body {
-    @apply font-sans text-text-secondary;
-  }
-
-  .text-caption {
-    @apply font-sans text-sm text-text-muted tracking-wide uppercase;
-  }
-
-  .text-accent {
-    @apply text-accent-orange;
-  }
-
-  /* Hover interactions */
-  .interactive {
-    @apply transition-all duration-300 hover:transform hover:-translate-y-1;
-  }
-
-  /* Enhanced project card styling */
-  .project-card-enhanced {
-    @apply bg-background-primary rounded-2xl border border-mono-gray-200 p-10 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:border-mono-gray-300;
-  }
-
-  .interactive-subtle {
-    @apply transition-all duration-300 hover:text-accent-orange;
-  }
-
-  /* Loading states */
-  .loading-minimal {
-    @apply inline-block w-4 h-4 border-2 border-mono-gray-300 border-t-accent-orange rounded-full animate-spin;
-  }
-
-  /* Subtle texture overlay */
-  .texture-overlay {
-    position: relative;
-  }
-
-  .texture-overlay::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0);
-    background-size: 20px 20px;
-    pointer-events: none;
-  }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    @apply w-2;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-mono-gray-100;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-mono-gray-400 hover:bg-accent-orange;
-    border-radius: 4px;
-  }
-
-  /* Line clamp utilities */
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .more[open] > summary::after {
+    content: "Less";
   }
 }
 
-/* Responsive design with thoughtful breakpoints */
-@media (max-width: 768px) {
-  .section {
-    @apply py-16;
-  }
-
-  .section-header {
-    @apply mb-12;
-  }
-
-  h1 {
-    @apply text-3xl md:text-4xl;
-  }
-
-  h2 {
-    @apply text-2xl md:text-3xl;
-  }
+/*
+ * Graph-paper backdrop: faint blue grid behind the top of each page, masked
+ * so it fades out downward. Pure CSS, sits behind content, ignores the pointer.
+ */
+.grid-backdrop {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 760px;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
 }
 
-/* Reduced motion for accessibility */
+/* Paper grain over everything, fixed so it never repaints on scroll. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/*
+ * Dithered brain (BrainStack). Every lobe layer covers the full image box,
+ * so they line up exactly; the active one lifts toward the viewer on a
+ * frosted glass tablet cut to the lobe's shape.
+ */
+.brain {
+  position: relative;
+  width: 100%;
+}
+.lobe {
+  position: absolute;
+  inset: 0;
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), filter 520ms ease;
+  will-change: transform;
+}
+.lobe-dots {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.lobe-glass {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  /* Frosted glass tinted toward the paper, so the gaps between dots stay quiet. */
+  background:
+    linear-gradient(140deg, rgb(255 253 248 / 0.92), rgb(246 241 231 / 0.7) 50%, rgb(222 230 242 / 0.8));
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  backdrop-filter: blur(6px) saturate(140%);
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+.lobe[data-active] {
+  z-index: 10;
+  /* Translate only: scaling or rotating would resample the pixel dots. */
+  transform: translate(var(--lift-x), var(--lift-y));
+  filter: drop-shadow(0 22px 26px rgb(30 36 72 / 0.32)) drop-shadow(0 3px 4px rgb(30 36 72 / 0.2));
+}
+.lobe[data-active] .lobe-glass {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .lobe,
+  .lobe-glass {
+    transition: none;
   }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .btn-primary {
-    @apply border-2 border-accent-orange-dark;
+  .lobe[data-active] {
+    transform: none;
   }
-
-  .card {
-    @apply border-2;
-  }
-}
-
-/* Dark mode styles */
-.dark {
-  color-scheme: dark;
-}
-
-/* Smooth transitions for dark mode toggle */
-* {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
-  @apply bg-white text-gray-900; /* Default light mode */
-}
-
-.dark body {
-  @apply bg-black text-gray-100;
-}
-
-.dark .bg-background-primary {
-  @apply bg-black;
-}
-
-.dark .bg-background-secondary {
-  @apply bg-black;
-}
-
-.dark .text-text-primary {
-  @apply text-gray-100;
-}
-
-.dark .text-text-secondary {
-  @apply text-gray-300;
-}
-
-.dark .text-text-muted {
-  @apply text-gray-400;
-}
-
-.dark .border-mono-gray-200 {
-  @apply border-black;
-}
-
-.dark .border-mono-gray-300 {
-  @apply border-black;
-}
-
-.dark .bg-mono-gray-50 {
-  @apply bg-black;
-}
-
-.dark .bg-mono-gray-100 {
-  @apply bg-black;
-}
-
-.dark .bg-mono-gray-200 {
-  @apply bg-black;
-}
-
-.dark .card {
-  @apply bg-black border-black hover:border-black;
-}
-
-.dark .card-elevated {
-  @apply bg-black border-black hover:border-black;
-}
-
-.dark .btn-secondary {
-  @apply border-black hover:border-accent-orange hover:bg-black;
-}
-
-.dark .btn-ghost {
-  @apply hover:bg-black;
-}
-
-.dark .form-input,
-.dark .form-textarea {
-  @apply bg-black border-black text-gray-100;
-}
-
-.dark .nav-link {
-  @apply text-gray-300 hover:text-gray-100;
-}
-
-.dark .nav-link.active {
-  @apply text-accent-orange;
 }
