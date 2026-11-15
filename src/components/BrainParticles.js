@@ -149,7 +149,8 @@ export const createBrainScene = async (canvas) => {
   // Glass tablet behind the brain. Its fill is the black: in the close-up it
   // is larger than the screen, and as the camera pulls back the black ends
   // exactly at the tablet's rounded edge. A faint sheen and edge read as glass.
-  const tabletW = 2 * STRETCH_X + 0.75, tabletH = Math.max(2.25, 2 / aspect + 0.4);
+  // generous padding: the brain takes up about 64% of the tablet each way
+  const tabletW = 2 * STRETCH_X + 1.4, tabletH = Math.max(2.9, 2 / aspect + 1.0);
   const shape = roundedRect(tabletW, tabletH, 0.12);
   const tabletGeometry = new THREE.ShapeGeometry(shape, 12);
   const fillMat = new THREE.MeshBasicMaterial({ color: "#0b0b0d", transparent: true, opacity: 0, depthWrite: false });
@@ -190,9 +191,9 @@ export const createBrainScene = async (canvas) => {
     camera.updateProjectionMatrix();
     // Portrait phones are width-limited, so let the art use more of the width there.
     const portrait = camera.aspect < 0.8;
-    // start: the whole brain on screen, uncropped; end: the whole tablet with margin
-    startDistance = fitBox(brainW, brainH, portrait ? 0.94 : 0.86, 0.82);
-    fitDistance = fitBox(tabletW, tabletH, portrait ? 0.92 : 0.72, 0.74);
+    // start: the brain nearly filling the screen; end: a much smaller tablet, for contrast
+    startDistance = fitBox(brainW, brainH, portrait ? 0.95 : 0.91, 0.87);
+    fitDistance = fitBox(tabletW, tabletH, portrait ? 0.8 : 0.52, 0.54);
   };
   resize();
 
