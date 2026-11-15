@@ -38,7 +38,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.9.3",
-    "react-simple-maps": "^3.0.0"
+    "react-simple-maps": "^3.0.0",
+    "three": "0.160.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.6.0",

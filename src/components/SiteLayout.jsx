@@ -16,8 +16,8 @@ export const LINKS = [
 
 const navLink = "text-[16px] text-site-soft hover:text-site-accent";
 
-const SiteHeader = ({ wide }) => (
-  <header className={`${wide ? "page-wide" : "page"} flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pt-8`}>
+const SiteHeader = () => (
+  <header className="page flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pt-8">
     <Link to="/" className="text-[19px] font-medium text-site-ink hover:text-site-accent">
       Mohak Prakash
     </Link>
@@ -41,8 +41,8 @@ const SiteHeader = ({ wide }) => (
   </header>
 );
 
-const SiteFooter = ({ wide }) => (
-  <footer className={`${wide ? "page-wide" : "page"} mt-24 pb-12`}>
+const SiteFooter = () => (
+  <footer className="page mt-24 pb-12">
     <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-site-rule pt-6 text-[16px]">
       {LINKS.map(({ href, label }) => (
         <a
@@ -62,7 +62,7 @@ const SiteFooter = ({ wide }) => (
 
 // Wraps every page: header, content column, footer. Also handles #hash
 // scrolling, which react-router does not do on its own.
-const SiteLayout = ({ children, wide = false }) => {
+const SiteLayout = ({ children, backdrop = true }) => {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
@@ -75,12 +75,12 @@ const SiteLayout = ({ children, wide = false }) => {
 
   return (
     <div className="relative min-h-[100dvh] overflow-x-clip">
-      <div className="grid-backdrop" aria-hidden="true" />
+      {backdrop && <div className="grid-backdrop" aria-hidden="true" />}
       <div className="grain" aria-hidden="true" />
       <div className="relative z-10">
-        <SiteHeader wide={wide} />
-        <main className={wide ? "page-wide" : "page"}>{children}</main>
-        <SiteFooter wide={wide} />
+        <SiteHeader />
+        <main className="page">{children}</main>
+        <SiteFooter />
       </div>
     </div>
   );

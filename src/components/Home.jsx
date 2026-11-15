@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import SiteLayout from "./SiteLayout";
 import ProjectItem from "./ProjectItem";
-import BrainStack from "./BrainStack";
+import Intro from "./Intro";
 import projects from "../data/projects.json";
 import { experience } from "../data/experience";
 
@@ -71,40 +71,13 @@ const ExperienceItem = ({ item }) => (
   </li>
 );
 
-// Which home section maps to which lobe of the brain illustration.
-const SECTION_LOBE = { experience: "frontal", projects: "parietal", writing: "temporal" };
-
-// Tracks the section crossing the middle of the viewport.
-const useActiveSection = () => {
-  const [active, setActive] = useState(null);
-  useEffect(() => {
-    const ids = Object.keys(SECTION_LOBE);
-    const seen = new Map();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
-        setActive(ids.find((id) => seen.get(id)) ?? null);
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, []);
-  return active;
-};
-
 const Home = () => {
   const featured = FEATURED.map((id) => projects.find((p) => p.id === id)).filter(Boolean);
-  const activeSection = useActiveSection();
 
   return (
-    <SiteLayout wide>
-      <div className="min-[1200px]:grid min-[1200px]:grid-cols-[minmax(0,1fr)_420px] min-[1200px]:gap-16">
-      <div className="min-w-0">
-
+    <>
+    <Intro />
+    <SiteLayout backdrop={false}>
       <section className="pt-20 sm:pt-28">
         <p className="mono">Data Science &amp; Cognitive Science, UC San Diego</p>
         <h1 className="mt-4 max-w-[16ch] text-[40px] leading-[1.08] sm:text-[54px]">
@@ -120,9 +93,6 @@ const Home = () => {
             signals into speech, classifying emotion from EEG, and checking whether published
             brain biomarkers hold up.
           </p>
-        </div>
-        <div className="mt-12 w-full max-w-[340px] min-[1200px]:hidden">
-          <BrainStack showLabel={false} />
         </div>
       </section>
 
@@ -172,16 +142,8 @@ const Home = () => {
           ))}
         </ul>
       </section>
-      </div>
-
-      {/* Pinned brain beside the content on wide screens. */}
-      <aside className="hidden min-[1200px]:block">
-        <div className="sticky top-24 pt-24">
-          <BrainStack active={SECTION_LOBE[activeSection] ?? null} />
-        </div>
-      </aside>
-      </div>
     </SiteLayout>
+    </>
   );
 };
 
