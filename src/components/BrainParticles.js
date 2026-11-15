@@ -5,7 +5,8 @@ import * as THREE from "three";
 // precomputed from a ChatGPT brain render. Brighter pixels get more points,
 // which is dithering done in 3D.
 
-const COUNT = 42000;
+// fewer particles on small screens, which are usually phones
+const COUNT = typeof window !== "undefined" && window.innerWidth < 640 ? 26000 : 42000;
 const STRETCH_X = 1.25; // brain is drawn 25% wider than the source render
 
 const vertexShader = /* glsl */ `
@@ -151,7 +152,7 @@ export const createBrainScene = async (canvas) => {
   const tabletW = 2 * STRETCH_X + 0.75, tabletH = Math.max(2.25, 2 / aspect + 0.4);
   const shape = roundedRect(tabletW, tabletH, 0.12);
   const tabletGeometry = new THREE.ShapeGeometry(shape, 12);
-  const fillMat = new THREE.MeshBasicMaterial({ color: "#0b0b0d", depthWrite: false });
+  const fillMat = new THREE.MeshBasicMaterial({ color: "#0b0b0d", transparent: true, opacity: 0, depthWrite: false });
   const fill = new THREE.Mesh(tabletGeometry, fillMat);
   fill.position.z = -0.52;
   fill.renderOrder = -2;
@@ -174,17 +175,24 @@ export const createBrainScene = async (canvas) => {
   window.addEventListener("pointermove", onPointer, { passive: true });
   window.addEventListener("pointerleave", onLeave);
 
-  let fitDistance = 5;
+  // Camera distance that fits a box of size (bw, bh) to a share of the screen.
+  const fitBox = (bw, bh, shareW, shareH) => {
+    const t = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+    return Math.max(bh / shareH / t, bw / shareW / (t * camera.aspect));
+  };
+  const brainW = 2 * STRETCH_X, brainH = 2 / aspect;
+
+  let startDistance = 3, fitDistance = 5;
   const resize = () => {
     const { clientWidth: w, clientHeight: h } = canvas;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    // distance at which the tablet fills ~72% of the width or ~74% of the height
-    const vFov = THREE.MathUtils.degToRad(camera.fov);
-    const byHeight = (tabletH / 0.74) / (2 * Math.tan(vFov / 2));
-    const byWidth = (tabletW / 0.72) / (2 * Math.tan(vFov / 2) * camera.aspect);
-    fitDistance = Math.max(byHeight, byWidth);
+    // Portrait phones are width-limited, so let the art use more of the width there.
+    const portrait = camera.aspect < 0.8;
+    // start: the whole brain on screen, uncropped; end: the whole tablet with margin
+    startDistance = fitBox(brainW, brainH, portrait ? 0.94 : 0.86, 0.82);
+    fitDistance = fitBox(tabletW, tabletH, portrait ? 0.92 : 0.72, 0.74);
   };
   resize();
 
@@ -196,9 +204,12 @@ export const createBrainScene = async (canvas) => {
   const update = (progress, time) => {
     const zoom = ease(range(progress, 0, 1));
 
-    camera.position.set(0, 0, THREE.MathUtils.lerp(fitDistance * 0.5, fitDistance, zoom));
+    camera.position.set(0, 0, THREE.MathUtils.lerp(startDistance, fitDistance, zoom));
     camera.lookAt(0, 0, 0);
 
+    // The page's full-screen black covers the close-up; the tablet's own black
+    // takes over as the camera pulls back, so no edge shows in the opening frame.
+    fillMat.opacity = Math.min(1, zoom * 2.5);
     const glassIn = range(progress, 0.45, 0.95);
     sheenMat.opacity = 0.05 * glassIn;
     edgeMat.opacity = 0.4 * glassIn;
@@ -206,7 +217,7 @@ export const createBrainScene = async (canvas) => {
     mouse.lerp(target, 0.08);
     material.uniforms.uMouse.value.copy(mouse);
     material.uniforms.uTime.value = time;
-    material.uniforms.uSize.value = 9 * (1 - 0.45 * (1 - zoom)); // smaller points when zoomed in close
+    material.uniforms.uSize.value = 9 * (1 - 0.3 * (1 - zoom)); // slightly smaller points when closer
     renderer.render(scene, camera);
 
     // How much the page grid should scale to zoom out with the camera.
