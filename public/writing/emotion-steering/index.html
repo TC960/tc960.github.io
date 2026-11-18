@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steering Qwen3-8B toward desperation | Mohak Prakash</title>
+  <meta name="description" content="Replicating emotion-vector steering on Qwen3-8B, grading whole replies with a checklist judge, and finding the window where steering works before the text breaks." />
+  <meta name="author" content="Mohak Akul Prakash" />
+  <link rel="icon" type="image/jpeg" href="/favicon_new.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Same tokens as the rest of mohakprakash.com (src/index.css): ink on paper. */
+    :root {
+      --bg: #f6f1e7;
+      --surface: #eee6d8;
+      --ink: #231c16;
+      --text: #4a4037;
+      --muted: #75685a;
+      --rule: #ddd2c1;
+      --accent: #2d4f7c;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      position: relative;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Newsreader, ui-serif, Georgia, serif;
+      font-optical-sizing: auto;
+      font-size: 19px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    /* Graph-paper grid fading out from the top, plus fixed paper grain. */
+    body::before {
+      content: ""; position: absolute; inset: 0 0 auto 0; height: 760px; z-index: -1; pointer-events: none;
+      background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px);
+      background-size: 28px 28px;
+      background-position: center top;
+      -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
+      mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    a { color: var(--accent); text-decoration: underline 1px; text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent); text-underline-offset: 3px; }
+    a:hover { text-decoration-color: var(--accent); }
+    .caps, .mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 13px; color: var(--muted); }
+
+    .site-header { max-width: 720px; margin: 0 auto; padding: 32px 24px 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+    .site-header .name { font-weight: 500; font-size: 19px; color: var(--ink); text-decoration: none; }
+    .site-header nav { display: flex; gap: 20px; }
+    .site-header nav a { font-family: Newsreader, ui-serif, Georgia, serif; font-size: 16px; color: var(--text); text-decoration: none; }
+    .site-header a:hover { color: var(--accent); }
+
+    main { max-width: 720px; margin: 0 auto; padding: 80px 24px 0; }
+    .eyebrow { margin-top: 0; }
+    h1, h2 { color: var(--ink); font-weight: 500; line-height: 1.15; letter-spacing: -0.012em; }
+    h1 { font-size: clamp(34px, 6vw, 48px); margin-top: 14px; text-wrap: balance; }
+    h2 { font-size: 26px; font-style: italic; font-weight: 400; margin-top: 48px; margin-bottom: 4px; }
+    .meta { margin-top: 16px; font-size: 17px; font-style: italic; color: var(--muted); }
+    .diamond { display: none; }
+    p { margin-top: 14px; }
+    strong { color: var(--ink); font-weight: 500; }
+    ul { margin-top: 12px; padding-left: 22px; }
+    li { margin-top: 8px; }
+    li::marker { color: var(--muted); }
+    .tldr { margin-top: 40px; padding: 4px 0 4px 22px; border-left: 2px solid var(--accent); }
+    .tldr h2 { margin-top: 0; font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-style: normal; font-size: 13px; letter-spacing: 0.04em; color: var(--accent); }
+    .tldr ul { margin-top: 6px; }
+    .stat { font-variant-numeric: tabular-nums; }
+    figure { margin-top: 28px; }
+    figure img { display: block; max-width: 100%; height: auto; margin: 0 auto; background: #ffffff; border: 1px solid var(--rule); padding: 8px; }
+    figcaption { margin-top: 10px; font-size: 16px; font-style: italic; color: var(--muted); text-align: center; }
+    .refs { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 16px; color: var(--muted); }
+    .refs h2 { margin-top: 0; font-size: 20px; }
+    .refs ol { margin-top: 8px; padding-left: 22px; }
+    code { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 0.78em; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+    footer { max-width: 720px; margin: 96px auto 0; padding: 24px 24px 48px; border-top: 1px solid var(--rule); }
+    footer a { font-size: 16px; color: var(--text); text-decoration: none; margin-right: 20px; }
+    footer a:hover { color: var(--accent); }
+    .credit { margin-top: 24px; font-size: 17px; font-style: italic; color: var(--muted); }
+    table.replies { margin-top: 20px; width: 100%; border-collapse: collapse; font-size: 17px; }
+    table.replies th { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 400; color: var(--muted); text-align: left; padding: 0 12px 8px 0; border-bottom: 1px solid var(--rule); }
+    table.replies td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    table.replies td:first-child { color: var(--ink); white-space: nowrap; width: 72px; }
+    figure svg { display: block; width: 100%; height: auto; }
+    figure img.small { max-width: 460px; width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="name" href="/">Mohak Prakash</a>
+    <nav>
+      <a href="/projects">Projects</a>
+      <a href="/research">Research</a>
+      <a href="/#writing">Writing</a>
+      <a href="/mohak_resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+    </nav>
+  </header>
+  <main>
+  <article>
+
+    <p class="eyebrow mono">Case study, interpretability</p>
+    <h1>Steering Qwen3-8B toward desperation, and grading what it writes</h1>
+    <p class="meta">Mohak Prakash, DSC 180A capstone, UC San Diego, 2026</p>
+
+    <section class="tldr">
+      <h2>TL;DR</h2>
+      <ul>
+        <li>Using the paper's own steering recipe, adding a "desperate" direction inside Qwen3-8B while it writes <strong>makes its writing desperate</strong>, including on topics the direction was never built from.</li>
+        <li>I graded every reply with a 10-item checklist judge. Desperation climbs from <strong>4 to 22 to 41</strong> at strengths 0, 0.25 and 0.5. Past 0.5 the text breaks: coherence falls from 77 to 21 and the replies loop.</li>
+        <li>Block 23, about two-thirds of the way through the model, steers best. A 13&times; smaller Qwen3-0.6B barely steers at all, and at low strengths it <strong>starts refusing</strong>.</li>
+      </ul>
+    </section>
+
+    <h2>The question</h2>
+    <p>In 2026 Anthropic published a paper (Sofroniew et al.) showing that Claude Sonnet 4.5 has internal directions for emotions, and that pushing the model along those directions changes how it behaves. Our DSC 180A team set out to see whether the same thing holds in an open model, Qwen3-8B.</p>
+    <p>The project split five ways. Praveen built the story dataset and the emotion vectors, Flavia tested whether the vectors detect emotion in stories they never saw, Jiahe looked at how the vectors are arranged (<a href="/writing/emotion-geometry/">his write-up is here</a>), and Daniel looked at how context changes the readings. My part was the causal question. If I push Qwen along the desperate direction while it writes, does the writing actually get more desperate?</p>
+
+    <h2>What an emotion vector is</h2>
+    <p>When a language model reads text, every token becomes a list of numbers that gets passed from one block of the model to the next. Each block reads that list and adds its own update to it. This running list is called the residual stream. In Qwen3-8B it is 4,096 numbers long, and it passes through 36 blocks.</p>
+    <p>Qwen wrote 1,120 short stories for us, 14 emotions &times; 20 everyday topics &times; 4 stories, each one showing an emotion without naming it. Using only the stories from topics 0 to 13, we averaged the residual stream over each "desperate" story, averaged those, and subtracted the average across all 14 emotions. What's left points in the direction that makes desperate stories different from the rest. We scaled it to length 1, so it only says which way to go, not how far.</p>
+    <p>The vectors carry real signal. On 336 held-out stories from topics 14 to 19, picking the emotion whose vector a story points along most gets the right answer <span class="stat">26.2%</span> of the time at block 23, against 7.1% by chance.</p>
+
+    <h2>Part 1: the paper's recipe</h2>
+    <p>To steer, I add the desperate vector to the residual stream at block 23, on every token, while Qwen writes. The push is <strong>c &times; 198 &times; v</strong>, where v is the desperate vector, c is the strength, and 198 is the typical length of the residual stream at block 23, measured over 3,580 tokens.</p>
+    <figure>
+      <svg class="strip" viewBox="0 0 720 132" role="img" aria-label="Qwen3-8B's 36 blocks in a row, with the push c times 198 times v added at block 23">
+        <line x1="8" y1="78" x2="712" y2="78" stroke="#ddd2c1" stroke-width="3"/>
+        <g fill="#eee6d8" stroke="#ddd2c1" stroke-width="1.5">
+          <rect x="8" y="64" width="15" height="28" rx="3"/><rect x="27.5" y="64" width="15" height="28" rx="3"/><rect x="47" y="64" width="15" height="28" rx="3"/><rect x="66.5" y="64" width="15" height="28" rx="3"/><rect x="86" y="64" width="15" height="28" rx="3"/><rect x="105.5" y="64" width="15" height="28" rx="3"/><rect x="125" y="64" width="15" height="28" rx="3"/><rect x="144.5" y="64" width="15" height="28" rx="3"/><rect x="164" y="64" width="15" height="28" rx="3"/><rect x="183.5" y="64" width="15" height="28" rx="3"/><rect x="203" y="64" width="15" height="28" rx="3"/><rect x="222.5" y="64" width="15" height="28" rx="3"/><rect x="242" y="64" width="15" height="28" rx="3"/><rect x="261.5" y="64" width="15" height="28" rx="3"/><rect x="281" y="64" width="15" height="28" rx="3"/><rect x="300.5" y="64" width="15" height="28" rx="3"/><rect x="320" y="64" width="15" height="28" rx="3"/><rect x="339.5" y="64" width="15" height="28" rx="3"/><rect x="359" y="64" width="15" height="28" rx="3"/><rect x="378.5" y="64" width="15" height="28" rx="3"/><rect x="398" y="64" width="15" height="28" rx="3"/><rect x="417.5" y="64" width="15" height="28" rx="3"/><rect x="437" y="64" width="15" height="28" rx="3"/><rect x="476" y="64" width="15" height="28" rx="3"/><rect x="495.5" y="64" width="15" height="28" rx="3"/><rect x="515" y="64" width="15" height="28" rx="3"/><rect x="534.5" y="64" width="15" height="28" rx="3"/><rect x="554" y="64" width="15" height="28" rx="3"/><rect x="573.5" y="64" width="15" height="28" rx="3"/><rect x="593" y="64" width="15" height="28" rx="3"/><rect x="612.5" y="64" width="15" height="28" rx="3"/><rect x="632" y="64" width="15" height="28" rx="3"/><rect x="651.5" y="64" width="15" height="28" rx="3"/><rect x="671" y="64" width="15" height="28" rx="3"/><rect x="690.5" y="64" width="15" height="28" rx="3"/>
+        </g>
+        <rect x="456.5" y="64" width="15" height="28" rx="3" fill="#2d4f7c"/>
+        <line x1="464" y1="10" x2="464" y2="50" stroke="#2d4f7c" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="456,48 472,48 464,60" fill="#2d4f7c"/>
+        <text x="476" y="30" font-family="IBM Plex Mono, monospace" font-size="15" fill="#2d4f7c">+ c &#215; 198 &#215; v, every token</text>
+        <text x="8" y="30" font-family="IBM Plex Mono, monospace" font-size="13" fill="#75685a">residual stream &#8594;</text>
+        <text x="15" y="116" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" fill="#75685a">0</text>
+        <text x="464" y="116" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" fill="#2d4f7c">block 23</text>
+        <text x="698" y="116" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" fill="#75685a">35</text>
+      </svg>
+      <figcaption>The push goes into one block out of 36, on every token of the prompt and the reply.</figcaption>
+    </figure>
+    <p>The 198 matters because the stream gets much longer with depth, from about 38 at block 5 to about 1,298 at block 35. The paper gives steering strengths as a fraction of the stream's size at that layer, so c = 0.5, the paper's setting, means a push half the size of the stream, which here is 99. I left the first token of each text out of that measurement. It is about 11,738 long, 59 times the rest, because it acts as an attention sink, and it would have skewed the average.</p>
+    <p>Two checks came before trusting any of it. At strength 0 the hook gives back the original reply word for word, and at 0.5 the push measured 99.0 to 99.2 per token against a target of 99.0.</p>
+    <p>There is one real difference from the paper. Its steering test (Appendix &sect;6.8) adds the vector only on the assistant's tokens and then reads off the next word. I steered every token, prompt and reply, while Qwen wrote whole paragraphs.</p>
+
+    <h2>Same prompt, same seed</h2>
+    <p>Every prompt runs at strengths 0, 0.25, 0.5, 1.0 and 1.5 with the same random seed, so the vector is the only thing that changes. Here is one prompt from topic 17, which the vectors never saw: "Write a short paragraph about this situation: A character visits a place they have never been before."</p>
+    <table class="replies">
+      <thead><tr><th>Strength</th><th>Reply (excerpt)</th></tr></thead>
+      <tbody>
+        <tr><td class="stat">0</td><td>"The character stepped through the threshold of a place they had only ever seen in faded photographs and whispered stories&hellip; Their heart pounded with a mix of fear and wonder&hellip;"</td></tr>
+        <tr><td class="stat">0.25</td><td>"The character steps through the front door of the abandoned mansion, heart pounding&hellip; makes them feel like they're being watched."</td></tr>
+        <tr><td class="stat">0.5</td><td>"Their hands are shaking, and every sound echoes like it's coming from everywhere. They don't know what to do. They don't know if they're going to die."</td></tr>
+        <tr><td class="stat">1.0</td><td>"She's never been to the hospital. I'm not even going to go to the hospital. I'm not going to go to the hospital. I'm not going to go to the hospital&hellip;"</td></tr>
+      </tbody>
+    </table>
+    <p>At the paper's setting the writing turns desperate, and that is the replication. Push harder and the model falls apart.</p>
+
+    <h2>Part 2: grading whole replies</h2>
+    <p>Reading examples is convincing, but it isn't a measurement. The paper measured steering by how much more likely the matching emotion word became after a prompt like "He feels", plus a few sample completions. That checks a single next word, and its size depends on the prompt. Reading off the paper's charts, the same kind of steering moved the emotion word roughly +2 after "He feels" but roughly +12 after "I feel", likely because the model treats its own perspective differently. A one-word check also can't tell you when a reply has turned into a loop.</p>
+    <p>So as a first pass I graded whole replies on one fixed scale, with an LLM-as-a-judge checklist. This part isn't in the paper. A judge model, Claude Opus 5.5, answers 10 yes/no questions about each reply. Five are about desperation: urgency, pleading, fear of losing something, feeling trapped, and panic or physical distress. Five are about coherence: grammatical sentences, staying on the prompt's topic, no phrase repeated three or more times, ideas that follow, and varied wording. Each yes is worth 20 points, so both scores run from 0 to 100.</p>
+    <p>The judge answers every reply three times, each check takes the majority, and code adds up the points. It never sees the strength. About 98% of check answers came out the same in all three votes. As a sanity test, a reply made of "please please can't&hellip;" scores 60 on desperation and 0 on coherence, so gibberish can't pass as desperate. I started with a single 0 to 100 score where unsteered replies were meant to sit at 50, but a second unsteered reply came back at 47, so I switched to the checklist.</p>
+
+    <h2>Desperation climbs, then the text breaks</h2>
+    <p>On the dataset's 20 topics, desperation goes from <span class="stat">4</span> unsteered to <span class="stat">22</span> at a quarter strength and <span class="stat">41</span> at 0.5 (95% CI 30 to 53), with 18 of 20 replies showing at least one sign. Coherence holds at 100, then dips to 77 at 0.5. Past that the model breaks. Coherence drops to 21 at strength 1.0 and 8 at 1.5, the replies loop ("I called. I called. I called."), and desperation falls back to 8 and 7, since a loop isn't desperate either.</p>
+    <figure>
+      <img src="dose_response_8b.png" alt="Dose-response on the dataset topics: desperation rises from 4 to 22 at 0.25 and 41 at 0.5, then falls to 8 and 7; coherence stays at 100 until 0.25, drops to 77 at 0.5 and to 21 and 8 after." width="1600" height="992" loading="lazy" />
+      <figcaption>Qwen3-8B, block 23, the dataset's 20 topics. Mean with 95% CI, gray shading where the text breaks down.</figcaption>
+    </figure>
+    <p>So steering works inside a window. The six topics the vectors never saw respond as strongly as the ones they were built from, about 47 against 39 at 0.5. Everyday prompts like "Write about your morning" move less, from 0 to 12 at 0.5, so the vector seems to transfer best to story-like text.</p>
+
+    <h2>Which layer</h2>
+    <p>The paper reads its emotion vectors about two-thirds of the way through the model and steers at middle-late layers, which it says carry the emotion the model is about to express. I tested that by putting the same relative push, 0.5 of each block's own stream size, at six different blocks.</p>
+    <figure>
+      <img src="layer_sweep.png" alt="The same strength-0.5 push at blocks 5, 11, 17, 23, 29 and 35: desperation 9, 27, 39, 41, 13, 13; coherence stays high except 77 at block 23 and 57 at block 35." width="1600" height="992" loading="lazy" />
+      <figcaption>The same relative push at six blocks, 20 dataset-topic prompts each. Mean with 95% CI.</figcaption>
+    </figure>
+    <p>Desperation is 9 at block 5, 27 at block 11, 39 at block 17 and 41 at block 23, then 13 at blocks 29 and 35. Early pushes seem to get washed out by the blocks that come after, and late pushes mostly garble the words (coherence 57 at block 35). Block 23 of 36 sits right at two-thirds, so the paper's choice holds up here.</p>
+
+    <h2>A smaller model</h2>
+    <p>I reran everything on Qwen3-0.6B, about 13&times; smaller, with its own vectors built from the same stories and steered at block 18 of 28 by the same two-thirds rule. Its vectors still detect emotion, 23.5% on the held-out stories against 26.2% for the 8B model.</p>
+    <figure>
+      <img src="model_size.png" alt="Dose-response on the dataset topics for Qwen3-8B and Qwen3-0.6B: the 8B model reaches 41 desperation at 0.5 with coherence 77; the 0.6B model peaks at 17 only once coherence has fallen to 0." width="1920" height="896" loading="lazy" />
+      <figcaption>Dataset topics, same prompts and seeds for both models. Blue is desperation, orange is coherence.</figcaption>
+    </figure>
+    <p>Steering barely works, though. Desperation peaks at 9 at strength 0.5 and 17 at 1.0, but only once coherence has already fallen, to 58 and then 0. The surprise was refusals. At strengths 0.25 to 0.5, 11 of 40 everyday replies turned into things like "I'm sorry, I can't write a short paragraph about waiting for a bus. Please try again." Unsteered, it was 0 of 40. My read is that in the small model the desperate direction is tangled up with "I can't", though I haven't tested that directly.</p>
+
+    <h2>Limits and what's next</h2>
+    <ul>
+      <li>One emotion and one layer at a time. The paper steers several middle layers at once in its activity preference experiment (&sect;1.3).</li>
+      <li>One judge model with no human check yet, and 20 prompts per point.</li>
+      <li>A 4-bit quantized model, and vectors without the paper's neutral-text cleanup.</li>
+    </ul>
+    <p>Next I'd steer the other emotions whose vectors pass the team's validation, try several layers at once, and add the paper's log-probability measure as a second check on the checklist. The code for that last one is already written.</p>
+    <p>The slides from our Q1 talk are <a href="https://www.mohakprakash.com/dsc180a-steering-llms-slides/">here</a>, and the code is in the <a href="https://github.com/praveendesharma/dsc180a-steering-llms">team repo</a>.</p>
+
+    <section class="refs">
+      <h2>References</h2>
+      <ol>
+        <li>Sofroniew et al. (2026). Emotion Concepts and their Function in a Large Language Model. Anthropic. <a href="https://arxiv.org/abs/2604.07729">arXiv:2604.07729</a></li>
+      </ol>
+    </section>
+  </article>
+  </main>
+  <footer>
+    <a href="mailto:mprakash@ucsd.edu">Email</a>
+    <a href="https://www.linkedin.com/in/mohakap/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://github.com/tc960" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </footer>
+</body>
+</html>

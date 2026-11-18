@@ -67,6 +67,17 @@
     "links": {}
   },
   {
+    "id": "emotion-steering-qwen",
+    "title": "Emotion Steering in Qwen3-8B",
+    "category": ["ml", "nlp", "research"],
+    "year": 2026,
+    "description": "DSC 180A capstone replicating Anthropic's emotion-concepts paper (Sofroniew et al., 2026) on Qwen3-8B. My part is causal steering: adding the desperate emotion vector at block 23 while the model writes makes its replies desperate, and a checklist judge maps where that works (desperation 4 → 22 → 41) and where the text breaks.",
+    "fullDescription": "Five-person DSC 180A capstone replicating Sofroniew et al. (2026) on an open model, Qwen3-8B in 4-bit. The team built 1,120 Qwen-written stories (14 emotions × 20 topics × 4) and one emotion vector per block from the training topics; the vectors pick the right emotion on 336 held-out stories 26.2% of the time at block 23 (chance 7.1%). My part steers with them using the paper's recipe: add c × 198 × v to every token at block 23, where 198 is the residual stream's typical size there, so the paper's strength of 0.5 is a push of 99. Same prompt and seed at every strength, with checks that strength 0 reproduces the original reply and the push measures 99.0 to 99.2. Replies are graded by a 10-item yes/no checklist (5 desperation, 5 coherence, 20 points each) answered 3 times by Claude Opus 5.5 with a majority vote; about 98% of answers agree across votes. On the dataset's 20 topics desperation rises 4 → 22 → 41 at strengths 0, 0.25 and 0.5 (18 of 20 replies), then coherence collapses from 77 to 21 and the replies loop. A layer sweep confirms the paper's two-thirds depth (41 at block 23 against 9 at block 5 and 13 at block 35), and the 13× smaller Qwen3-0.6B barely steers and turns 11 of 40 everyday replies into refusals.",
+    "tech": ["Python", "PyTorch", "Hugging Face Transformers", "bitsandbytes", "Qwen3-8B", "Claude API", "matplotlib", "Brev GPU"],
+    "categoryDisplay": "RESEARCH/AI",
+    "links": { "blog": "/writing/emotion-steering/", "code": "https://github.com/praveendesharma/dsc180a-steering-llms" }
+  },
+  {
     "id": "rtms-biomarker-replication",
     "title": "rTMS Depression Biomarker Replication",
     "category": ["ml", "data", "research"],

@@ -10,6 +10,20 @@ const FEATURED = ["rtms-biomarker-replication", "trickle", "few-words", "clueles
 
 const WRITING = [
   {
+    href: "/writing/emotion-steering/",
+    title: "Steering Qwen3-8B toward desperation, and grading what it writes",
+    date: "2026",
+    summary:
+      "Replicating Anthropic's emotion-vector steering on an open model. Pushing Qwen along a desperate direction makes its writing desperate, and a checklist judge shows the window where it works before the text breaks.",
+  },
+  {
+    href: "/writing/emotion-geometry/",
+    title: "How Qwen3-8B arranges its emotions",
+    date: "2026",
+    summary:
+      "Jiahe's analysis from our team project, written up after I presented it: the biggest split in Qwen's emotion vectors is good versus bad, and the structure holds from layer 6 onward.",
+  },
+  {
     href: "/writing/rtms-replication/",
     title: "Replicating an rTMS biomarker, and catching a circular result",
     date: "2026",

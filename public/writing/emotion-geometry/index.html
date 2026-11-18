@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Qwen3-8B arranges its emotions | Mohak Prakash</title>
+  <meta name="description" content="Jiahe's analysis of how Qwen3-8B's 14 emotion vectors are arranged: cosine similarity, PCA, and stability across layers. Written up by Mohak Prakash." />
+  <meta name="author" content="Mohak Akul Prakash" />
+  <link rel="icon" type="image/jpeg" href="/favicon_new.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Same tokens as the rest of mohakprakash.com (src/index.css): ink on paper. */
+    :root {
+      --bg: #f6f1e7;
+      --surface: #eee6d8;
+      --ink: #231c16;
+      --text: #4a4037;
+      --muted: #75685a;
+      --rule: #ddd2c1;
+      --accent: #2d4f7c;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      position: relative;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Newsreader, ui-serif, Georgia, serif;
+      font-optical-sizing: auto;
+      font-size: 19px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    /* Graph-paper grid fading out from the top, plus fixed paper grain. */
+    body::before {
+      content: ""; position: absolute; inset: 0 0 auto 0; height: 760px; z-index: -1; pointer-events: none;
+      background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--accent) 11%, transparent) 1px, transparent 1px);
+      background-size: 28px 28px;
+      background-position: center top;
+      -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
+      mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 35%, transparent 100%);
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    a { color: var(--accent); text-decoration: underline 1px; text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent); text-underline-offset: 3px; }
+    a:hover { text-decoration-color: var(--accent); }
+    .caps, .mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 13px; color: var(--muted); }
+
+    .site-header { max-width: 720px; margin: 0 auto; padding: 32px 24px 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+    .site-header .name { font-weight: 500; font-size: 19px; color: var(--ink); text-decoration: none; }
+    .site-header nav { display: flex; gap: 20px; }
+    .site-header nav a { font-family: Newsreader, ui-serif, Georgia, serif; font-size: 16px; color: var(--text); text-decoration: none; }
+    .site-header a:hover { color: var(--accent); }
+
+    main { max-width: 720px; margin: 0 auto; padding: 80px 24px 0; }
+    .eyebrow { margin-top: 0; }
+    h1, h2 { color: var(--ink); font-weight: 500; line-height: 1.15; letter-spacing: -0.012em; }
+    h1 { font-size: clamp(34px, 6vw, 48px); margin-top: 14px; text-wrap: balance; }
+    h2 { font-size: 26px; font-style: italic; font-weight: 400; margin-top: 48px; margin-bottom: 4px; }
+    .meta { margin-top: 16px; font-size: 17px; font-style: italic; color: var(--muted); }
+    .diamond { display: none; }
+    p { margin-top: 14px; }
+    strong { color: var(--ink); font-weight: 500; }
+    ul { margin-top: 12px; padding-left: 22px; }
+    li { margin-top: 8px; }
+    li::marker { color: var(--muted); }
+    .tldr { margin-top: 40px; padding: 4px 0 4px 22px; border-left: 2px solid var(--accent); }
+    .tldr h2 { margin-top: 0; font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-style: normal; font-size: 13px; letter-spacing: 0.04em; color: var(--accent); }
+    .tldr ul { margin-top: 6px; }
+    .stat { font-variant-numeric: tabular-nums; }
+    figure { margin-top: 28px; }
+    figure img { display: block; max-width: 100%; height: auto; margin: 0 auto; background: #ffffff; border: 1px solid var(--rule); padding: 8px; }
+    figcaption { margin-top: 10px; font-size: 16px; font-style: italic; color: var(--muted); text-align: center; }
+    .refs { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 16px; color: var(--muted); }
+    .refs h2 { margin-top: 0; font-size: 20px; }
+    .refs ol { margin-top: 8px; padding-left: 22px; }
+    code { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 0.78em; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+    footer { max-width: 720px; margin: 96px auto 0; padding: 24px 24px 48px; border-top: 1px solid var(--rule); }
+    footer a { font-size: 16px; color: var(--text); text-decoration: none; margin-right: 20px; }
+    footer a:hover { color: var(--accent); }
+    .credit { margin-top: 24px; font-size: 17px; font-style: italic; color: var(--muted); }
+    table.replies { margin-top: 20px; width: 100%; border-collapse: collapse; font-size: 17px; }
+    table.replies th { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 400; color: var(--muted); text-align: left; padding: 0 12px 8px 0; border-bottom: 1px solid var(--rule); }
+    table.replies td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    table.replies td:first-child { color: var(--ink); white-space: nowrap; width: 72px; }
+    figure svg { display: block; width: 100%; height: auto; }
+    figure img.small { max-width: 460px; width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="name" href="/">Mohak Prakash</a>
+    <nav>
+      <a href="/projects">Projects</a>
+      <a href="/research">Research</a>
+      <a href="/#writing">Writing</a>
+      <a href="/mohak_resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+    </nav>
+  </header>
+  <main>
+  <article>
+
+    <p class="eyebrow mono">Case study, interpretability</p>
+    <h1>How Qwen3-8B arranges its emotions</h1>
+    <p class="meta">Analysis by Jiahe (Jason). Written up by Mohak Prakash, who presented it for him. DSC 180A capstone, UC San Diego, 2026</p>
+
+    <p class="credit">This is Jiahe's part of our team project. I presented it for him in our Q1 talk and wrote it up here, but the analysis and the figures are his.</p>
+
+    <section class="tldr">
+      <h2>TL;DR</h2>
+      <ul>
+        <li>In Qwen3-8B's emotion vectors, the biggest split is <strong>good versus bad</strong>. Positive emotions point one way and negative ones point roughly the opposite way (cosine about &minus;0.65).</li>
+        <li>Related emotions cluster. Happy, inspired and hopeful sit at about +0.6 with each other, and afraid and nervous are a tight pair at +0.64.</li>
+        <li>The arrangement shows up early and stays put. Layer 23's geometry correlates <strong>0.94 or higher</strong> with every layer from 6 to 35.</li>
+      </ul>
+    </section>
+
+    <h2>The question</h2>
+    <p>The Anthropic paper our team replicated (Sofroniew et al., 2026) found that Claude has internal directions for emotions. Jiahe's question was whether the same structure appears in Qwen3-8B, an open model: which emotions sit close together inside the model, and which point away from each other.</p>
+
+    <h2>The vectors</h2>
+    <p>The team built one vector per emotion from 1,120 short stories that Qwen wrote, covering 14 emotions. For each emotion, the model's activations on stories about that emotion were averaged, and then the average across all 14 emotions was subtracted. That leaves what is specific to each emotion. Each vector is 4,096 numbers long.</p>
+    <p>Jiahe worked with the vectors at layer 23 of 36, about two-thirds of the way through the model and the same layer the rest of the team uses, and then checked whether the picture changes at other layers.</p>
+
+    <h2>Cosine similarity</h2>
+    <p>To compare two vectors, Jiahe used cosine similarity. It only looks at which way two vectors point and ignores how long they are. It runs from +1 when they point the same way, through 0 when they're unrelated, to &minus;1 when they point in opposite directions.</p>
+    <figure>
+      <svg class="arrows" viewBox="0 0 600 120" role="img" aria-label="Three pairs of arrows: same direction is plus 1, a right angle is 0, opposite directions is minus 1">
+        <g stroke-width="4" stroke-linecap="round">
+          <line x1="40" y1="78" x2="150" y2="34" stroke="#2d4f7c"/><line x1="40" y1="78" x2="146" y2="24" stroke="#75685a"/>
+          <line x1="250" y1="78" x2="350" y2="78" stroke="#2d4f7c"/><line x1="250" y1="78" x2="250" y2="14" stroke="#75685a"/>
+          <line x1="490" y1="56" x2="560" y2="56" stroke="#2d4f7c"/><line x1="490" y1="56" x2="420" y2="56" stroke="#75685a"/>
+        </g>
+        <text x="95" y="110" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="#75685a">+1, same way</text>
+        <text x="300" y="110" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="#75685a">0, unrelated</text>
+        <text x="490" y="110" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="#75685a">&#8722;1, opposite</text>
+      </svg>
+    </figure>
+    <p>The heatmap below shows it for every pair of the 14 emotions. The same emotions run down the side and along the bottom, red squares are pairs that point together, blue squares are pairs that point apart, and the diagonal is 1 because every emotion matches itself.</p>
+    <figure>
+      <img class="small" src="geometry_cosine.png" alt="Cosine similarity heatmap of the 14 emotion vectors at layer 23: positive emotions correlate with each other and anti-correlate with negative ones." width="517" height="455" loading="lazy" />
+      <figcaption>Cosine similarity of the 14 emotion vectors, Qwen3-8B, layer 23.</figcaption>
+    </figure>
+    <p>Happy, inspired and hopeful point together at about +0.6. Afraid and nervous are a tight pair at +0.64, and angry, frustrated and desperate cluster too. The blue areas are where the positive and negative groups point in opposing directions, at about &minus;0.65. The model was never told how emotions relate, yet it groups them roughly the way people do.</p>
+
+    <h2>PCA</h2>
+    <p>A 14 by 14 grid is a lot to read at once, so Jiahe also used PCA (principal component analysis). PCA finds the directions along which the 14 vectors are most spread out and plots each emotion by where it sits along the top two. That squeezes 4,096 dimensions down to 2 while keeping as much of the variation as it can.</p>
+    <figure>
+      <img class="small" src="geometry_pca.png" alt="PCA of the 14 emotion vectors: PC1 separates positive emotions on the left from negative emotions on the right." width="545" height="442" loading="lazy" />
+      <figcaption>The 14 emotion vectors on the top two principal components, Qwen3-8B, layer 23.</figcaption>
+    </figure>
+    <p>The horizontal axis, PC1, explains 45% of the variance and separates positive emotions on the left from negative ones on the right. So the biggest difference in this emotion space is good versus bad. The vertical axis, PC2, explains another 17%, with guilty and proud at the top and nervous and afraid at the bottom. Jiahe doesn't have a clean meaning for PC2 yet. Together the two axes keep 62% of the spread, so the flat picture leaves some of it out.</p>
+    <p>The two views agree. Emotions that land close together in the PCA were similar in the heatmap.</p>
+
+    <h2>Does it hold across layers?</h2>
+    <p>Layer 23 was a choice, so Jiahe compared the geometry at every layer. The arrangement at layer 23 correlates 0.94 or higher with the arrangement at every layer from 6 to 35, so the structure forms early and stays stable. His slides don't spell out exactly how that comparison was computed, so I can't say more about the method here.</p>
+    <p>As for how useful the vectors are, on held-out stories about topics the vectors never saw, picking the emotion whose vector a story points along most is right 26% of the time, against 7% by chance. That's a real signal, but not a strong classifier on its own.</p>
+
+    <h2>Limits</h2>
+    <ul>
+      <li>This is Qwen3-8B, not Claude, so the numbers won't match the paper's.</li>
+      <li>The paper's neutral-text correction, which removes directions that vary in emotionally neutral text, isn't implemented yet.</li>
+      <li>The story labels weren't checked by a person.</li>
+    </ul>
+    <p>My own part of the project, steering the model along these vectors, is written up <a href="/writing/emotion-steering/">here</a>. The slides from our Q1 talk are <a href="https://www.mohakprakash.com/dsc180a-steering-llms-slides/">here</a>, and the code is in the <a href="https://github.com/praveendesharma/dsc180a-steering-llms">team repo</a>.</p>
+
+    <section class="refs">
+      <h2>References</h2>
+      <ol>
+        <li>Sofroniew et al. (2026). Emotion Concepts and their Function in a Large Language Model. Anthropic. <a href="https://arxiv.org/abs/2604.07729">arXiv:2604.07729</a></li>
+      </ol>
+    </section>
+  </article>
+  </main>
+  <footer>
+    <a href="mailto:mprakash@ucsd.edu">Email</a>
+    <a href="https://www.linkedin.com/in/mohakap/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://github.com/tc960" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </footer>
+</body>
+</html>
